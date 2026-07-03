@@ -1,0 +1,25 @@
+name: Flake8 Check
+on: 
+    push:
+    pull_request:
+
+jobs:
+    flake8:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Check Repository
+          uses: actions/checkout@v4
+
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
+            
+        - name: Install Flake8
+          run: pip install flake8
+
+        - name: Run Flake8
+          run: flake8 .
+
+          
