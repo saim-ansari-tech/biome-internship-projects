@@ -4,227 +4,207 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def load_data(csv_path):
-    df = pd.read_csv(csv_path)
-    print(df.shape)
-    return df
+class EDA:
 
+    def __init__(self, df):
+        self.df = df
 
-def clean_placeholder(df):
+    def clean_placeholder(self):
+        self.df.replace("?", np.nan, inplace=True)
 
-    df = df.replace("?", np.nan, inplace=True)
-
-
-def dataset_summary(df):
-
-    summary = {
-        "Rows": df.shape[0],
-        "Columns": df.shape[1],
-        "Duplicate Rows": df.duplicated().sum(),
-        "Total Missing Values": int(df.isnull().sum().sum()),
-        "Missing Percentage": round((df.isnull().sum() / df.size) * 100, 2),
-    }
-    return summary
-
-
-def feature_summary(df, feature):
-
-    summary = {
-        "Feature": feature,
-        "Data Type": str(df[feature].dtype),
-        "Total Values": len(df),
-        "Unique Values": df[feature].nunique(dropna=True),
-        "Missing Count": df[feature].isnull().sum(),
-        "Missing Percentage": round((df[feature].isnull().
-                                    sum() / len(df)) * 100, 2),
-        "Question Mark Count": (df[feature] == "?").sum(),
-        "Most Frequent Value": (
-            df[feature].mode().iloc[0]
-            if not df[feature].mode().empty else np.nan
-        ),
-        "Most Frequent Count": df[feature].value_counts(dropna=False).iloc[0],
-    }
-    return summary
-
-
-def missing_value_report(df):
-
-    report = pd.DataFrame(
-        {
-            "Feature": df.columns,
-            "Missing Count": df.isnull().sum().values,
-            "Missing Percentage": (
-                df.isnull().sum() / len(df) * 100
-            ).round(2).values,
+    def dataset_summary(self):
+        summary = {
+            "Rows": self.df.shape[0],
+            "Columns": self.df.shape[1],
+            "Duplicate Rows": self.df.duplicated().sum(),
+            "Total Missing Values": int(self.df.isnull().sum().sum()),
+            "Missing Percentage": round(
+                (self.df.isnull().sum() / self.df.size) * 100, 2
+            ),
         }
-    )
-    report = report.sort_values(
-        by="Missing Percentage",
-        ascending=False
-    ).reset_index(drop=True)
+        return summary
 
-    return report
-
-
-def question_mark_report(df):
-
-    report = pd.DataFrame(
-        {
-            "Feature": df.columns,
-            "Question Mark Count": (df == "?").sum().values,
-            "Question Mark Percentage": ((df == "?").sum() / len(df) * 100)
-            .round(2)
-            .values,
+    def feature_summary(self, feature):
+        summary = {
+            "Feature": feature,
+            "Data Type": str(self.df[feature].dtype),
+            "Total Values": len(self.df),
+            "Unique Values": self.df[feature].nunique(dropna=True),
+            "Missing Count": self.df[feature].isnull().sum(),
+            "Missing Percentage": round(
+                (self.df[feature].isnull().sum() / len(self.df)) * 100, 2
+            ),
+            "Question Mark Count": (self.df[feature] == "?").sum(),
+            "Most Frequent Value": (
+                self.df[feature].mode().iloc[0]
+                if not self.df[feature].mode().empty
+                else np.nan
+            ),
+            "Most Frequent Count": self.df[feature].value_counts(
+                dropna=False).iloc[0],
         }
-    )
+        return summary
 
-    report = report[report["Question Mark Count"] > 0]
-    report = (
-        report.sort_values(
+    def missing_value_report(self):
+
+        report = pd.DataFrame(
+            {
+                "Feature": self.df.columns,
+                "Missing Count": self.df.isnull().sum().values,
+                "Missing Percentage": (self.df.isnull().sum() /
+                                       len(self.df) * 100)
+                .round(2)
+                .values,
+            }
+        )
+        report = report.sort_values(
+            by="Missing Percentage", ascending=False
+        ).reset_index(drop=True)
+
+        return report
+
+    def question_mark_report(self):
+
+        report = pd.DataFrame(
+            {
+                "Feature": self.df.columns,
+                "Quetion Mark Count": (self.df == "?").sum().values,
+                "Question Mark Percentage": (
+                    (self.df == "?").sum() / len(self.df) * 100
+                )
+                .round(2)
+                .values,
+            }
+        )
+
+        report = report[report["Question Mark Count"] > 0]
+        report = report.sort_values(
             by="Question Mark Count",
             ascending=False,
-        )
-        .reset_index(drop=True)
-    )
+        ).reset_index(drop=True)
 
-    return report
+        return report
 
+    def duplicated_report(self):
 
-def duplicated_report(df):
-
-    report = {
-        "Total Rows": len(df),
-        "Duplicate Rows": df.duplicated().sum(),
-        "Duplicate Percentage": round(
-            (df.duplicated().sum() / len(df)) * 100,
-            2),
-    }
-
-    return report
-
-
-def value_distribution(df, feature):
-
-    counts = df[feature].value_counts(dropna=False)
-    percentages = (df[feature].value_counts(dropna=False,
-                                            normalize=True) * 100).round(
-        2
-    )
-
-    report = pd.DataFrame(
-        {
-            "Value": counts.index,
-            "Count": counts.values,
-            "Percentage": percentages.values,
+        report = {
+            "Total Rows": len(self.df),
+            "Duplicate Rows": self.df.duplicated().sum(),
+            "Duplicate Percentage": round(
+                (self.df.duplicated().sum() / len(self.df)) * 100, 2
+            ),
         }
-    )
+        return report
 
-    return report
+    def value_distribution(self, feature):
+        counts = self.df[feature].value_counts(dropna=False)
+        percentages = (
+            self.df[feature].value_counts(dropna=False, normalize=True) * 100
+        ).round(2)
 
+        report = pd.DataFrame(
+            {
+                "Value": counts.index,
+                "Count": counts.values,
+                "Percentage": percentages.values,
+            }
+        )
 
-def numerical_summary(df, feature):
+        return report
 
-    summary = {
-        "Feature": feature,
-        "Mean": df[feature].mean(),
-        "Median": df[feature].median(),
-        "Mode": df[feature].mode().iloc[0],
-        "Minimum": df[feature].min(),
-        "Maximum": df[feature].max(),
-        "Standard Deviation": df[feature].std(),
-        "Variance": df[feature].var(),
-        "Skewness": df[feature].skew(),
-        "Kurtosis": df[feature].kurt(),
-        "Q1": df[feature].quantile(0.25),
-        "Q2": df[feature].quantile(0.50),
-        "Q3": df[feature].quantile(0.75),
-    }
+    def numerical_summary(self, feature):
+        summary = {
+            "Feature": feature,
+            "Mean": self.df[feature].mean(),
+            "Median": self.df[feature].median(),
+            "Mode": self.df[feature].mode().iloc[0],
+            "Minimum": self.df[feature].min(),
+            "Maximum": self.df[feature].max(),
+            "Standard Deviation": self.df[feature].std(),
+            "Variance": self.df[feature].var(),
+            "Skewness": self.df[feature].skew(),
+            "Kurtosis": self.df[feature].kurt(),
+            "Q1": self.df[feature].quantile(0.25),
+            "Q2": self.df[feature].quantile(0.50),
+            "Q3": self.df[feature].quantile(0.75),
+        }
 
-    return summary
+        return summary
 
+    def categorical_summary(self, feature):
+        summary = {
+            "Feature": feature,
+            "dtype": self.df[feature].dtype(),
+            "No of Cat": self.df[feature].nunique(),
+            "Missing count": self.df[feature].isnull().sum(),
+            "Missing Percentage": round(self.df[feature].
+                                        isnull().mean() * 100,
+                                        2),
+            "Mode": self.df[feature].mode(dropna=True),
+            "Mode freq": self.df[feature].value_counts(dropna=False).iloc[0],
+        }
+        return summary
 
-def categorical_summary(df, feature):
+    def outlier_report(self, feature):
 
-    summary = {
-        "Feature": feature,
-        "dtype": df[feature].dtype(),
-        "No of Cat": df[feature].nunique(),
-        "Missing count": df[feature].isnull().sum(),
-        "Missing Percentage": round(df[feature].isnull().mean() * 100, 2),
-        "Mode": df[feature].mode(dropna=True),
-        "Mode freq": df[feature].value_counts(dropna=False).iloc[0],
-    }
-    return summary
+        q1 = self.df[feature].quantile(0.25)
+        q3 = self.df[feature].quantile(0.75)
+        iqr = q3 - q1
+        low = q1 - 1.5 * iqr
+        upper = q1 + 1.5 * iqr
+        outliers = self.df[(self.df[feature] < low) |
+                           (self.df[feature] > upper)]
 
+        summary = {
+            "Q1": q1,
+            "Q3": q3,
+            "IQR": iqr,
+            "Lower Bound": low,
+            "Upper Bound": upper,
+            "Outlier Count": len(outliers),
+            "Outlier Percentage": round(len(outliers) / len(self.df) * 100, 2),
+        }
+        return summary
 
-def outlier_report(df, feature):
+    def correlation_matrix(self):
+        numeric_df = self.df.select_dtypes(include="number")
+        corr = numeric_df.corr()
 
-    q1 = df[feature].quantile(0.25)
-    q3 = df[feature].quantile(0.75)
-    iqr = q3 - q1
-    low = q1 - 1.5 * iqr
-    upper = q1 + 1.5 * iqr
-    outliers = df[(df[feature] < low) | (df[feature] > upper)]
+        return corr
 
-    summary = {
-        "Q1": q1,
-        "Q3": q3,
-        "IQR": iqr,
-        "Lower Bound": low,
-        "Upper Bound": upper,
-        "Outlier Count": len(outliers),
-        "Outlier Percentage": round(len(outliers) / len(df) * 100, 2),
-    }
-    return summary
+    def plot_histogram(self, feature):
+        plt.Figure(figsize=(5, 5))
+        sns.histplot(data=self.df, x=feature, kde=True)
+        plt.show()
 
+    def plot_boxplot(self, feature):
+        plt.Figure(figsize=(5, 5))
+        sns.boxplot(data=self.df, x=feature)
+        plt.show()
 
-def correlation_matrix(df):
+    def plot_countplot(self, feature):
+        plt.Figure(figsize=(5, 5))
+        sns.countplot(data=self.df, x=feature)
+        plt.show()
 
-    numeric_df = df.select_dtypes(include="number")
-    corr = numeric_df.corr()
+    def plot_missing_values(self):
+        missing_percentage = (self.df.isnull().sum() / len(self.df)) * 100
+        missing_percentage = missing_percentage[missing_percentage > 0]
+        missing_percentage = missing_percentage.sort_values(ascending=False)
 
-    return corr
+        if missing_percentage.empty:
+            print("No missing values found in the dataset.")
+            return None
 
+        fig, ax = plt.subplots(figsize=(12, 6))
+        sns.barplot(x=missing_percentage.index,
+                    y=missing_percentage.values, ax=ax)
 
-def plot_histogram(df, feature):
+        ax.set_title("Missing Value Percentage by Feature")
+        ax.set_xlabel("Features")
+        ax.set_ylabel("Missing Percentage (%)")
 
-    plt.Figure(figsize=(5, 5))
-    sns.histplot(data=df, x=feature, kde=True)
-    plt.show()
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
 
-
-def plot_boxplot(df, feature):
-
-    plt.Figure(figsize=(5, 5))
-    sns.boxplot(data=df, x=feature)
-    plt.show()
-
-
-def plot_countplot(df, feature):
-
-    plt.Figure(figsize=(5, 5))
-    sns.countplot(data=df, x=feature)
-    plt.show()
-
-
-def plot_missing_values(df):
-
-    missing_percentage = (df.isnull().sum() / len(df)) * 100
-    missing_percentage = missing_percentage[missing_percentage > 0]
-    missing_percentage = missing_percentage.sort_values(ascending=False)
-
-    if missing_percentage.empty:
-        print("No missing values found in the dataset.")
-        return None
-
-    fig, ax = plt.subplots(figsize=(12, 6))
-    sns.barplot(x=missing_percentage.index, y=missing_percentage.values, ax=ax)
-
-    ax.set_title("Missing Value Percentage by Feature")
-    ax.set_xlabel("Features")
-    ax.set_ylabel("Missing Percentage (%)")
-
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-
-    return fig
+        return fig
