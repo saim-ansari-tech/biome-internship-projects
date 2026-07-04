@@ -68,7 +68,7 @@ class EDA:
         report = pd.DataFrame(
             {
                 "Feature": self.df.columns,
-                "Quetion Mark Count": (self.df == "?").sum().values,
+                "Question Mark Count": (self.df == "?").sum().values,
                 "Question Mark Percentage": (
                     (self.df == "?").sum() / len(self.df) * 100
                 )
@@ -151,7 +151,7 @@ class EDA:
         q3 = self.df[feature].quantile(0.75)
         iqr = q3 - q1
         low = q1 - 1.5 * iqr
-        upper = q1 + 1.5 * iqr
+        upper = q3 + 1.5 * iqr
         outliers = self.df[(self.df[feature] < low) |
                            (self.df[feature] > upper)]
 
