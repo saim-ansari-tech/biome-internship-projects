@@ -6,7 +6,6 @@ class FeatureEngineering:
     def __init__(self, df):
         self.df = df
 
-
     def tranform_age(self):
         age_mapping = {
             "[0-10)": 0,
@@ -23,14 +22,12 @@ class FeatureEngineering:
 
         self.df["age"] = self.df["age"].map(age_mapping)
 
-
     def total_visits(self):
         self.df["total_visits"] = (
-            self.df["number_outpatient"] +
-            self.df["number_emergency"] +
-            self.df["number_inpatient"]
+            self.df["number_outpatient"]
+            + self.df["number_emergency"]
+            + self.df["number_inpatient"]
         )
-
 
     def long_stay(self):
         self.long_stay_threshold = self.df["time_in_hospital"].quantile(0.75)
@@ -38,20 +35,19 @@ class FeatureEngineering:
             self.df["time_in_hospital"] > self.long_stay_threshold
         ).astype(int)
 
-
     def high_medications(self):
-        self.high_medications_threshold = self.df["num_medications"].quantile(0.75)
+        self.high_medications_threshold = self.df[
+            "num_medications"].quantile(0.75)
         self.df["high_medications"] = (
             self.df["num_medications"] > self.high_medications_threshold
         ).astype(int)
 
-
     def multiple_diagnoses(self):
-        self.multiple_diagnoses_threshold = self.df["num_diagnoses"].quantile(0.75)
+        self.multiple_diagnoses_threshold = self.df[
+            "num_diagnoses"].quantile(0.75)
         self.df["multiple_diagnoses"] = (
             self.df["num_diagnoses"] > self.multiple_diagnoses_threshold
         ).astype(int)
-
 
     def categorize_diagnosis(self, code):
         if pd.isna(code):
@@ -96,16 +92,9 @@ class FeatureEngineering:
 
         else:
             return "Other"
-        
 
     def engineer_diagnosis_groups(self):
-        diagnosis_cols = [
-            "diag_1",
-            "diag_2",
-            "diag_3"
-        ]
+        diagnosis_cols = ["diag_1", "diag_2", "diag_3"]
 
         for col in diagnosis_cols:
-            self.df[col] = self.df[col].apply(
-            self.categorize_diagnosis
-        )
+            self.df[col] = self.df[col].apply(self.categorize_diagnosis)
