@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np  
+import numpy as np
 
 
 class Preprocessing:
@@ -11,13 +11,13 @@ class Preprocessing:
 
     def drop_category_rows(self, column, category):
         self.df = self.df[
-        self.df[column] != category
-    ]
-    
+            self.df[column] != category
+        ]
+
     def drop_rows_by_values(self, column, values):
         self.df = self.df[
-        ~self.df[column].isin(values)
-    ]
+            ~self.df[column].isin(values)
+        ]
 
     def clean_placeholder(self):
         self.df.replace("?", np.nan, inplace=True)
