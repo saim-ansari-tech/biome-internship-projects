@@ -101,7 +101,7 @@ class FeatureEngineering:
                 self.df[col]
                 .apply(self.categorize_diagnosis)
             )
-    
+
     def drop_original_diagnosis_cols(self):
         self.df.drop(
             columns=["diag_1", "diag_2", "diag_3"],
