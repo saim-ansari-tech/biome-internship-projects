@@ -6,7 +6,7 @@ class FeatureEngineering:
     def __init__(self, df):
         self.df = df
 
-    def tranform_age(self):
+    def transform_age(self):
         age_mapping = {
             "[0-10)": 0,
             "[10-20)": 1,
@@ -44,9 +44,9 @@ class FeatureEngineering:
 
     def multiple_diagnoses(self):
         self.multiple_diagnoses_threshold = self.df[
-            "num_diagnoses"].quantile(0.75)
+            "number_diagnoses"].quantile(0.75)
         self.df["multiple_diagnoses"] = (
-            self.df["num_diagnoses"] > self.multiple_diagnoses_threshold
+            self.df["number_diagnoses"] > self.multiple_diagnoses_threshold
         ).astype(int)
 
     def categorize_diagnosis(self, code):
@@ -97,4 +97,13 @@ class FeatureEngineering:
         diagnosis_cols = ["diag_1", "diag_2", "diag_3"]
 
         for col in diagnosis_cols:
-            self.df[col] = self.df[col].apply(self.categorize_diagnosis)
+            self.df[f"{col}_group"] = (
+                self.df[col]
+                .apply(self.categorize_diagnosis)
+            )
+    
+    def drop_original_diagnosis_cols(self):
+        self.df.drop(
+            columns=["diag_1", "diag_2", "diag_3"],
+            inplace=True,
+        )

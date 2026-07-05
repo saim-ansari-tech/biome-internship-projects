@@ -8,7 +8,9 @@ class Encoding:
         self.df = df
 
     def one_hot_encode(self, cols):
-        encoder = OneHotEncoder(sparse=False)
+        self.df[cols] = self.df[cols].astype(str)
+        
+        encoder = OneHotEncoder(sparse_output=False)
         encoded = encoder.fit_transform(self.df[cols])
 
         encoded_df = pd.DataFrame(
