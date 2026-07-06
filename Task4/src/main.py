@@ -8,8 +8,7 @@ import pandas as pd
 def main():
     df = pd.read_csv(
         (
-            "D:\\Internship\\biome-internship-projects\\"
-            "Task4\\data\\diabetic_data.csv"
+            "biome-internship-projects\\Task4\\data\\diabetic_data.csv"
         )
     )
     preproc = Preprocessing(df)

@@ -22,8 +22,12 @@ class Model:
         self.y = self.df["readmitted"]
 
     def split_data(self, test_size, random_state):
-        self.x_train, self.x_test, self.y_train,
-        self.y_test = train_test_split(
+        (
+            self.x_train,
+            self.x_test,
+            self.y_train,
+            self.y_test
+        ) = train_test_split(
             self.x,
             self.y,
             test_size=test_size,
