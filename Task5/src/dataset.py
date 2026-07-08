@@ -10,8 +10,8 @@ class SpeakerDataset(Dataset):
         self.df = pd.read_csv(csv_path)
 
     def __len__(self):
-        return len(self.df) 
-    
+        return len(self.df)
+
     def __getitem__(self, index):
         row = self.df.iloc[index]
 
@@ -28,6 +28,6 @@ class SpeakerDataset(Dataset):
 
         feature_tensor = torch.tensor(feature.magnitude, dtype=torch.float32)
         feature_tensor = feature_tensor.unsqueeze(0)
-        label_tensor = torch.tensor(label, dtype = torch.long)
+        label_tensor = torch.tensor(label, dtype=torch.long)
 
         return feature_tensor, label_tensor
