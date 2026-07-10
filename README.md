@@ -267,6 +267,288 @@ Portfolio: [saimansari.me](https://saimansari.me) | GitHub: [github.com/saim-ans
 
 ---
 
+## Task 5
+
+# Speaker Recognition using ECAPA-TDNN
+
+A deep learning-based speaker recognition system built using **PyTorch** and the **ECAPA-TDNN** architecture. The model is trained to classify speakers from their voice recordings using Log Mel Spectrogram features.
+
+---
+
+## Project Overview
+
+This project implements an end-to-end speaker recognition pipeline consisting of:
+
+- Audio preprocessing
+- Log Mel Spectrogram extraction
+- Custom PyTorch Dataset
+- ECAPA-TDNN model
+- Model training
+- Model evaluation
+- Performance visualization
+
+The objective is to identify the speaker of an input audio sample from a predefined set of speakers.
+
+---
+
+## Features
+
+- Custom PyTorch Dataset
+- Log Mel Spectrogram feature extraction
+- ECAPA-TDNN architecture
+- Cross Entropy Loss
+- Adam Optimizer
+- Training and evaluation scripts
+- Classification Report
+- Confusion Matrix
+- F1-Score visualization
+- Model checkpoint saving
+
+---
+
+## Project Structure
+
+```text
+Task_5/
+│
+├── data/
+│   ├── metadata_subset.csv
+│   ├── train.csv
+│   ├── val.csv
+│   └── test.csv
+│
+├── src/
+│   ├── blocks.py
+│   ├── config.py
+│   ├── dataset.py
+│   ├── encode_labels.py
+│   ├── evaluate_model.py
+│   ├── model.py
+│   ├── split_dataset.py
+│   └── train.py
+│
+├── model/
+│   └── ecapa_tdnn.pth
+│
+├── figures/
+│   └── f1_scores.png
+│
+├── requirements.txt
+```
+---
+
+## Dataset
+
+The dataset contains voice recordings from **100 speakers**.
+
+Dataset split:
+
+| Split | Purpose |
+|--------|----------|
+| Training | Model learning |
+| Validation | Hyperparameter tuning |
+| Testing | Final performance evaluation |
+
+Each speaker contains multiple audio recordings.
+
+---
+
+## Model Architecture
+
+The project uses the **ECAPA-TDNN (Emphasized Channel Attention, Propagation and Aggregation Time Delay Neural Network)** architecture.
+
+Pipeline:
+
+```
+Audio
+   │
+   ▼
+Log Mel Spectrogram
+   │
+   ▼
+TDNN Blocks
+   │
+   ▼
+Statistics Pooling
+   │
+   ▼
+Embedding Layer
+   │
+   ▼
+Classifier
+   │
+   ▼
+Predicted Speaker
+```
+
+---
+
+## Training
+
+Training uses:
+
+- Cross Entropy Loss
+- Adam Optimizer
+- Mini-batch Gradient Descent
+
+Training process:
+
+```
+Audio
+      ↓
+Mel Spectrogram
+      ↓
+ECAPA-TDNN
+      ↓
+Prediction
+      ↓
+CrossEntropyLoss
+      ↓
+Backpropagation
+      ↓
+Weight Update
+```
+
+---
+
+## Evaluation
+
+The trained model is evaluated on the test dataset using:
+
+- Test Loss
+- Test Accuracy
+- Precision
+- Recall
+- F1 Score
+- Classification Report
+- Confusion Matrix
+
+Evaluation is performed using:
+
+```python
+model.eval()
+
+with torch.no_grad():
+```
+
+to disable gradient computation during inference.
+
+---
+
+## Experimental Results
+
+### Training Performance
+
+| Metric | Value |
+|--------|---------|
+| Final Training Accuracy | **96.93%** |
+
+### Test Performance
+
+| Metric | Value |
+|--------|---------|
+| Test Accuracy | **74.00%** |
+| Test Loss | **1.0003** |
+
+Average Classification Metrics:
+
+| Metric | Score |
+|---------|-------|
+| Precision | **0.7989** |
+| Recall | **0.7400** |
+| F1 Score | **0.7389** |
+
+---
+
+## Visualizations
+
+The evaluation generates:
+
+- Confusion Matrix
+- Classification Report
+- Per-speaker F1 Score Plot
+
+These visualizations help analyze which speakers are correctly recognized and which speakers are frequently confused.
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-link>
+cd Task_5
+```
+
+Install dependencies:
+
+```bash
+pip install torch torchaudio librosa pandas numpy matplotlib scikit-learn
+```
+
+---
+
+## Training
+
+Run:
+
+```bash
+python train.py
+```
+
+The trained model will be saved as:
+
+```
+ecapa_tdnn.pth
+```
+
+---
+
+## Evaluation
+
+Run:
+
+```bash
+python evaluate.py
+```
+
+The script will display:
+
+- Test Accuracy
+- Test Loss
+- Classification Report
+- Confusion Matrix
+- F1 Score Plot
+
+---
+
+## Technologies Used
+
+- Python
+- PyTorch
+- Torchaudio
+- Librosa
+- NumPy
+- Pandas
+- Matplotlib
+- Scikit-Learn
+
+---
+
+## Future Improvements
+
+- Speaker Verification using embeddings
+- Data augmentation
+- Learning Rate Scheduler
+- Early Stopping
+- Mixed Precision Training
+- ONNX model export
+- Real-time microphone inference
+- Deployment using FastAPI or Streamlit
+
+---
+
 # Code Quality
 
 This repository follows Python coding best practices and includes automated code quality checks using **Flake8**.
@@ -312,3 +594,16 @@ pip install -r requirements.txt
 # Internship
 
 This repository serves as a collection of projects completed during my internship at **Biome**, demonstrating practical applications of data analysis, data quality assessment, and production-oriented machine learning workflows.
+
+
+## Author
+
+**Muhammad Saim Ansari**
+
+BS Robotics and Intelligent Systems
+
+Bahria University Islamabad
+
+## License
+
+This project is intended for educational and research purposes.
