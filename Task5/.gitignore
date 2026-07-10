@@ -1,5 +1,0 @@
-# Ignore all data
-data/
-# Ignore Python cache
-__pycache__/
-*.py[cod]
