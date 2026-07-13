@@ -13,10 +13,6 @@ class ECAPATDNN(nn.Module):
             in_channels=80, out_channels=512, kernel_size=5, dilation=1
         )
 
-        self.layer1 = TDNNBlock(
-            in_channels=80, out_channels=512, kernel_size=5, dilation=1
-        )
-
         self.layer2 = SERes2Block(channels=512, dilation=2)
 
         self.layer3 = SERes2Block(channels=512, dilation=3)
