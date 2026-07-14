@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to the Registration Page</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Welcome to the Registration Page</h1>
+
+        <p>
+            Register your voice profile by providing your username and voice sample.
+            The system will generate and securely store your voice embedding for future authentication.
+        </p>
+    </header>
+
+    <main>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p>
+                        <strong>{{ category.title() }}:</strong> {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/register" method="post" enctype="multipart/form-data">
+
+            <label for="username">Username:</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+            >
+
+            <br><br>
+
+            <label for="audiofile">Voice Sample:</label>
+            <input
+                type="file"
+                id="audiofile"
+                name="audiofile"
+                accept=".wav,.mp3,audio/*"
+            >
+
+            <br><br>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome to the Authentication Page</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Voice Authentication</h1>
+
+        <p>
+            Verify your identity by entering your username and uploading your voice sample.
+            The system will compare your uploaded voice with your registered voice profile to authenticate you.
+        </p>
+    </header>
+
+    <main>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p>
+                        <strong>{{ category.title() }}:</strong> {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/authenticate" method="post" enctype="multipart/form-data">
+
+            <label for="username">Username:</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+            >
+
+            <br><br>
+
+            <label for="audiofile">Voice Sample:</label>
+            <input
+                type="file"
+                id="audiofile"
+                name="audiofile"
+                accept=".wav,.mp3,audio/*"
+            >
+
+            <br><br>
+
+            <button type="submit">Authenticate</button>
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>
