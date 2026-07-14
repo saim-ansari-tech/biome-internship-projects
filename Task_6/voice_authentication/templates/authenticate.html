@@ -1,60 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Welcome to the Authentication Page</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Authenticate</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Voice Authentication</h1>
+<div class="container">
 
-        <p>
-            Verify your identity by entering your username and uploading your voice sample.
-            The system will compare your uploaded voice with your registered voice profile to authenticate you.
-        </p>
-    </header>
+<div class="card">
 
-    <main>
+<h1>Voice Authentication</h1>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p>
-                        <strong>{{ category.title() }}:</strong> {{ message }}
-                    </p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+<p>
+Authenticate yourself using your registered voice sample.
+</p>
 
-        <form action="/authenticate" method="post" enctype="multipart/form-data">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
 
-            <label for="username">Username:</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Enter your username"
-            >
+<div class="flash {{ category }}">
+{{ message }}
+</div>
 
-            <br><br>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-            <label for="audiofile">Voice Sample:</label>
-            <input
-                type="file"
-                id="audiofile"
-                name="audiofile"
-                accept=".wav,.mp3,audio/*"
-            >
+<form method="POST"
+enctype="multipart/form-data">
 
-            <br><br>
+<label>Username</label>
 
-            <button type="submit">Authenticate</button>
+<input
+type="text"
+name="username"
+placeholder="Enter username"
+required>
 
-        </form>
+<label>Voice Sample</label>
 
-    </main>
+<input
+type="file"
+name="audiofile"
+accept=".wav,.mp3"
+required>
+
+<button type="submit">
+Authenticate
+</button>
+
+</form>
+
+<div class="nav">
+
+<a href="{{ url_for('home') }}">
+← Back to Home
+</a>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 

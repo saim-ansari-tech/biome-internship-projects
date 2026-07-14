@@ -1,50 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Voice Authentication System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Biometric Authentication</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-    <header>
-        <h1>Voice Biometric Authentication System</h1>
+    <div class="container">
 
-        <p>
-            This web application demonstrates a voice biometric authentication system
-            powered by an ECAPA-TDNN deep learning model. Users can register their
-            voice samples to create a unique voice profile and later authenticate
-            themselves by comparing a new voice sample with the stored biometric
-            embedding using cosine similarity.
-        </p>
-    </header>
+        <div class="card">
 
-    <nav>
-        <h2>Navigation</h2>
+            <h1>Voice Biometric Authentication</h1>
 
-        <a href="/register">Register</a>
-        <br><br>
+            <p>
+                A Flask-based web application for secure speaker registration
+                and authentication using the ECAPA-TDNN deep learning model.
+            </p>
 
-        <a href="/authenticate">Authenticate</a>
-    </nav>
+            <div class="button-group">
 
-    <main>
-        <h2>About the Project</h2>
+                <a href="{{ url_for('register') }}">
+                    <button>Register</button>
+                </a>
 
-        <p>
-            The purpose of this application is to demonstrate how deep learning can be
-            used for secure voice biometric authentication through a simple web
-            interface built with Flask.
-        </p>
-    </main>
+                <a href="{{ url_for('authenticate') }}">
+                    <button>Authenticate</button>
+                </a>
 
-    <footer>
-        <hr>
+            </div>
 
-        <p>
-            Voice Biometric Authentication System | Flask + PyTorch + ECAPA-TDNN
-        </p>
-    </footer>
+        </div>
+
+        <div class="footer">
+            Developed by Muhammad Saim Ansari
+        </div>
+
+    </div>
 
 </body>
 

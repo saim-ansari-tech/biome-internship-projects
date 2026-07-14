@@ -1,59 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Welcome to the Registration Page</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Welcome to the Registration Page</h1>
+<div class="container">
 
-        <p>
-            Register your voice profile by providing your username and voice sample.
-            The system will generate and securely store your voice embedding for future authentication.
-        </p>
-    </header>
+<div class="card">
 
-    <main>
+<h1>User Registration</h1>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <p>
-                        <strong>{{ category.title() }}:</strong> {{ message }}
-                    </p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+<p>
+Register your voice profile by entering a unique username
+and uploading a voice sample.
+</p>
 
-        <form action="/register" method="post" enctype="multipart/form-data">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div class="flash {{ category }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
-            <label for="username">Username:</label>
-            <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Enter your username"
-            >
+<form method="POST"
+      enctype="multipart/form-data">
 
-            <br><br>
+<label>Username</label>
 
-            <label for="audiofile">Voice Sample:</label>
-            <input
-                type="file"
-                id="audiofile"
-                name="audiofile"
-                accept=".wav,.mp3,audio/*"
-            >
+<input
+type="text"
+name="username"
+placeholder="Enter username"
+required>
 
-            <br><br>
+<label>Voice Sample</label>
 
-            <button type="submit">Register</button>
+<input
+type="file"
+name="audiofile"
+accept=".wav,.mp3"
+required>
 
-        </form>
+<button type="submit">
+Register
+</button>
 
-    </main>
+</form>
+
+<div class="nav">
+
+<a href="{{ url_for('home') }}">
+← Back to Home
+</a>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
+
 </html>

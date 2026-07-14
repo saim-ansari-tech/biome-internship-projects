@@ -1,0 +1,179 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f9;
+    color: #333;
+}
+
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 60px auto;
+}
+
+.card {
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+
+h1 {
+    color: #1e3a8a;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+p {
+    text-align: center;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+input[type="text"],
+input[type="file"] {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+
+button {
+    margin-top: 25px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+/* ===========================
+   Home Buttons
+=========================== */
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.button-group a {
+    text-decoration: none;
+}
+
+.button-group button {
+    margin-top: 0;
+    min-width: 180px;
+}
+
+/* ===========================
+   Flash Messages
+=========================== */
+
+.flash {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+/* ===========================
+   Navigation
+=========================== */
+
+.nav {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
+   Footer
+=========================== */
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #888;
+    font-size: 14px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 95%;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+
+}
