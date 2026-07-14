@@ -9,7 +9,8 @@ HOP_LENGTH = 160
 CROP_DURATION = 3
 
 NUM_SPEAKERS = 100
-MODEL_PATH = r"D:\Internship_projects\biome-internship-projects\Task_6\voice_authentication\models\ecapa_tdnn.pth"
+MODEL_PATH = r"D:\Internship_projects\biome-internship-projects"
+r"\Task_6\voice_authentication\models\ecapa_tdnn.pth"
 
 UPLOAD_FOLDER = "uploads"
 EMBEDDING_FOLDER = "embeddings"

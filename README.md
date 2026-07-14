@@ -549,6 +549,227 @@ The script will display:
 
 ---
 
+
+
+## Task 6
+# Voice Biometric Authentication System using ECAPA-TDNN
+
+A Flask-based web application for **voice biometric authentication** using a pre-trained **ECAPA-TDNN** deep learning model. The system allows users to register their voice and later authenticate themselves by comparing voice embeddings using cosine similarity.
+
+---
+
+## Features
+
+- User Registration
+  - Register a unique username.
+  - Upload a voice sample.
+  - Generate and store speaker embeddings.
+
+- User Authentication
+  - Upload a new voice sample.
+  - Generate a new embedding.
+  - Compare with the stored embedding using cosine similarity.
+  - Authenticate based on a configurable similarity threshold.
+
+- Input Validation
+  - Unique username validation.
+  - Audio file validation.
+  - Supported audio formats.
+  - Flash messages for user feedback.
+
+---
+
+## Technologies Used
+
+- Python
+- Flask
+- PyTorch
+- Torchaudio
+- NumPy
+- Scikit-learn
+- HTML
+
+---
+
+## Project Structure
+
+```
+voice_authentication/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── models/
+│   ├── model.py
+│   ├── blocks.py
+│   └── ecapa_tdnn.pth
+│
+├── utils/
+│   ├── embedding.py
+│   ├── file_handler.py
+│   ├── preprocessing.py
+│   ├── similarity.py
+│   └── storage.py
+│
+├── templates/
+│   ├── home.html
+│   ├── register.html
+│   └── authenticate.html
+│
+├── uploads/
+│
+└── embeddings/
+```
+
+---
+
+## System Workflow
+
+### Registration
+
+```
+User
+   │
+   ▼
+Upload Voice Sample
+   │
+   ▼
+Audio Preprocessing
+   │
+   ▼
+ECAPA-TDNN
+   │
+   ▼
+Speaker Embedding
+   │
+   ▼
+Save Embedding (.npy)
+```
+
+---
+
+### Authentication
+
+```
+User
+   │
+   ▼
+Upload Voice Sample
+   │
+   ▼
+Generate New Embedding
+   │
+   ▼
+Load Stored Embedding
+   │
+   ▼
+Cosine Similarity
+   │
+   ▼
+Threshold Comparison
+   │
+   ▼
+Authentication Result
+```
+
+---
+
+## Installation
+
+### Clone the repository
+
+```bash
+git clone https://github.com/your-username/voice-authentication.git
+
+cd voice-authentication
+```
+
+---
+
+### Create Virtual Environment
+
+Windows
+
+```bash
+python -m venv venv
+```
+
+Activate
+
+```bash
+venv\Scripts\activate
+```
+
+---
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Running the Application
+
+```bash
+python app.py
+```
+
+Open your browser and visit
+
+```
+http://127.0.0.1:5000/
+```
+
+---
+
+## Supported Audio Formats
+
+- WAV (Recommended)
+- MP3
+
+> **Note:** Windows Voice Recorder saves recordings as `.m4a`, which is not currently supported. Convert `.m4a` files to `.wav` before uploading.
+
+---
+
+## Authentication Threshold
+
+The system authenticates users using cosine similarity.
+
+```python
+SIMILARITY_THRESHOLD = 0.75
+```
+
+This value can be adjusted based on experimental evaluation.
+
+---
+
+## Example Results
+
+| Test Case | Similarity Score | Result |
+|------------|----------------:|--------|
+| Same Speaker | 0.8285 | Authentication Successful |
+| Different Speaker | 0.7000 | Authentication Failed |
+
+---
+
+## Future Improvements
+
+- Support M4A audio files.
+- Automatic audio format conversion.
+- Multiple voice samples per user.
+- Database integration (SQLite/PostgreSQL).
+- User management dashboard.
+- Modern responsive UI.
+- Docker deployment.
+- HTTPS support.
+
+---
+
 # Code Quality
 
 This repository follows Python coding best practices and includes automated code quality checks using **Flake8**.

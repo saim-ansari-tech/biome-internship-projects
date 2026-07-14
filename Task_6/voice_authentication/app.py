@@ -37,29 +37,23 @@ def register():
         username = request.form.get("username")
         audio_file = request.files.get("audiofile")
 
-        # Validate username
         if not username:
             flash("Please enter a username.", "error")
             return redirect(url_for("register"))
 
-        # Validate audio file
         if not audio_file or audio_file.filename == "":
             flash("Please upload a voice sample.", "error")
             return redirect(url_for("register"))
 
-        # Check if username already exists
         if user_exists(username):
             flash("Username already exists.", "error")
             return redirect(url_for("register"))
 
         try:
-            # Save uploaded audio
             file_path = save_uploaded_file(audio_file)
 
-            # Generate speaker embedding
             embedding = generate_embedding(file_path)
 
-            # Save embedding
             save_embeddings(username, embedding)
 
             flash("Registration completed successfully!", "success")
@@ -80,32 +74,25 @@ def authenticate():
         username = request.form.get("username")
         audio_file = request.files.get("audiofile")
 
-        # Validate username
         if not username:
             flash("Please enter your username.", "error")
             return redirect(url_for("authenticate"))
 
-        # Validate audio file
         if not audio_file or audio_file.filename == "":
             flash("Please upload a voice sample.", "error")
             return redirect(url_for("authenticate"))
 
-        # Check whether user exists
         if not user_exists(username):
             flash("User not found. Please register first.", "error")
             return redirect(url_for("authenticate"))
 
         try:
-            # Save uploaded audio
             file_path = save_uploaded_file(audio_file)
 
-            # Generate embedding from uploaded voice
             new_embedding = generate_embedding(file_path)
 
-            # Load registered embedding
             registered_embedding = load_embedding(username)
 
-            # Calculate similarity
             similarity_score = calculate_similarity(
                 registered_embedding,
                 new_embedding
@@ -113,15 +100,16 @@ def authenticate():
 
             print(f"Similarity Score: {similarity_score:.4f}")
 
-            # Authentication decision
             if is_authenticated(similarity_score):
                 flash(
-                    f"Authentication Successful! Similarity Score: {similarity_score:.4f}",
+                    f"Authentication Successful!"
+                    f"Similarity Score: {similarity_score:.4f}",
                     "success"
                 )
             else:
                 flash(
-                    f"Authentication Failed! Similarity Score: {similarity_score:.4f}",
+                    f"Authentication Failed! Similarity Score:"
+                    f"{similarity_score:.4f}",
                     "error"
                 )
 
