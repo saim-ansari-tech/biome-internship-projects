@@ -76,9 +76,10 @@ class DataPreprocessing:
         return " ".join(words).strip()
 
     def clean_text(self):
-        self.df["cleaned_text"] = self.df
-        ["combined_text"].apply
-        (self.preprocess_text)
+        self.df["cleaned_text"] = (
+            self.df["combined_text"]
+            .apply(self.preprocess_text)
+        )
 
         print("Text Preprocessing completed successfully")
 
