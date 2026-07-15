@@ -770,6 +770,250 @@ This value can be adjusted based on experimental evaluation.
 
 ---
 
+## Task 7
+# AI Influencer Discovery System
+
+An AI-powered influencer recommendation system that classifies user interests into predefined topics using Machine Learning and recommends the most relevant social media influencers based on engagement metrics.
+
+---
+
+## Project Overview
+
+The AI Influencer Discovery System helps users discover influencers related to their interests.
+
+The system supports two modes:
+
+- **Topic Search:** Users directly select a topic (AI, Finance, Healthcare, Fitness, Travel, or Cricket) to view the highest-ranked influencers.
+- **AI Recommendation:** Users describe their interests in natural language, and the trained Machine Learning model predicts the most relevant topic before recommending influencers.
+
+The project combines Natural Language Processing (NLP), Machine Learning, and an influencer ranking algorithm.
+
+---
+
+## Features
+
+- Data preprocessing pipeline
+- Duplicate record removal
+- Timestamp conversion
+- Text cleaning and normalization
+- Stopword removal
+- Word lemmatization
+- TF-IDF text vectorization
+- Multi-class text classification
+- Automatic model comparison
+- AI-based topic prediction
+- Influencer ranking based on engagement
+- Command-line interactive interface
+
+---
+
+## Supported Topics
+
+- AI
+- Finance
+- Healthcare
+- Fitness
+- Travel
+- Cricket
+
+---
+
+## Project Workflow
+
+```
+Raw Dataset
+      │
+      ▼
+Data Preprocessing
+      │
+      ▼
+Text Cleaning
+      │
+      ▼
+TF-IDF Vectorization
+      │
+      ▼
+Model Training
+(Logistic Regression, Linear SVC, Multinomial Naive Bayes)
+      │
+      ▼
+Best Model Selection
+      │
+      ▼
+User Query
+      │
+      ▼
+Topic Prediction
+      │
+      ▼
+Influencer Ranking
+      │
+      ▼
+Top Influencer Recommendations
+```
+
+---
+
+## Technologies Used
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- NLTK
+- Joblib
+
+---
+
+## Project Structure
+
+```
+AI_Influencer_Discovery/
+│
+├── data/
+│   └── scraped_posts (2).csv
+│
+├── models/
+│   ├── topic_classifier.pkl
+│   └── tfidf_vectorizer.pkl
+│
+├── src/
+│   ├── preprocessing.py
+│   ├── trainer.py
+│   ├── ranking.py
+│   ├── inference.py
+│   ├── main.py
+│   └── test_script.py
+│
+├── notebooks/
+│   └── EDA.ipynb
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+## Machine Learning Pipeline
+
+### Text Preprocessing
+
+- Remove duplicate records
+- Convert timestamps
+- Merge post text and hashtags
+- Convert text to lowercase
+- Remove URLs
+- Remove mentions
+- Remove punctuation
+- Remove numbers
+- Remove stopwords
+- Lemmatize words
+
+### Feature Extraction
+
+TF-IDF Vectorizer
+
+- Maximum Features: 10,000
+- N-grams: (1,2)
+
+### Models Evaluated
+
+- Logistic Regression
+- Linear Support Vector Classifier (LinearSVC)
+- Multinomial Naive Bayes
+
+The best-performing model is automatically selected and saved for inference.
+
+---
+
+## Influencer Ranking
+
+Each post receives an engagement score using a weighted formula:
+
+```
+Engagement Score =
+0.5 × Likes
++ 0.3 × Comments
++ 0.2 × Shares
+```
+
+Verified accounts receive an additional 10% engagement bonus.
+
+Each influencer is then ranked using:
+
+```
+Influencer Score =
+0.50 × Average Engagement
++ 0.30 × Post Count
++ 0.20 × log(Followers + 1)
+```
+
+The influencers are sorted in descending order of the final score.
+
+---
+
+## Running the Project
+
+Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application
+
+```bash
+python src/main.py
+```
+
+---
+
+## Example
+
+```
+AI Influencer Discovery System
+
+1. Search by Topic
+2. AI Recommendation
+3. Exit
+
+Select Option: 2
+
+Describe what content you are interested in:
+
+Deep learning is transforming healthcare.
+
+Predicted Topic:
+AI
+
+Top Influencers
+
+...
+```
+
+---
+
+## Model Performance
+
+The final model achieved approximately **99% accuracy** on the test dataset.
+
+Evaluation metrics include:
+
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Confusion Matrix
+
+---
+
 # Code Quality
 
 This repository follows Python coding best practices and includes automated code quality checks using **Flake8**.

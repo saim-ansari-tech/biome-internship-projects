@@ -1,0 +1,14 @@
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+
+# Stopwords
+print(stopwords.words("english")[:10])
+
+# Lemmatizer
+lemmatizer = WordNetLemmatizer()
+print(lemmatizer.lemmatize("running", pos="v"))
+
+# Tokenizer
+print(word_tokenize("AI is transforming the world!"))
+
