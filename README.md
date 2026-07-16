@@ -771,43 +771,55 @@ This value can be adjusted based on experimental evaluation.
 ---
 
 ## Task 7
+
 # AI Influencer Discovery System
 
-An AI-powered influencer recommendation system that classifies user interests into predefined topics using Machine Learning and recommends the most relevant social media influencers based on engagement metrics.
+An AI-powered influencer recommendation system that combines Machine Learning, Semantic Search, and a Flask web application to help users discover relevant social media influencers based on their interests.
 
 ---
 
-## Project Overview
+# Project Overview
 
-The AI Influencer Discovery System helps users discover influencers related to their interests.
+The AI Influencer Discovery System helps users discover influencers related to their interests using three different approaches.
 
-The system supports two modes:
+### 1. Topic Search
 
-- **Topic Search:** Users directly select a topic (AI, Finance, Healthcare, Fitness, Travel, or Cricket) to view the highest-ranked influencers.
-- **AI Recommendation:** Users describe their interests in natural language, and the trained Machine Learning model predicts the most relevant topic before recommending influencers.
+Users directly select a topic to view the highest-ranked influencers.
 
-The project combines Natural Language Processing (NLP), Machine Learning, and an influencer ranking algorithm.
+### 2. AI Recommendation
+
+Users describe their interests in natural language. A trained Machine Learning classifier predicts the most relevant topic before recommending influencers.
+
+### 3. Semantic Search
+
+Users enter a free-text query. A pretrained Sentence Transformer model finds semantically similar posts and recommends the most relevant influencers.
+
+The project combines Natural Language Processing (NLP), Machine Learning, Semantic Search, and an engagement-based influencer ranking algorithm.
 
 ---
 
-## Features
+# Features
 
 - Data preprocessing pipeline
 - Duplicate record removal
 - Timestamp conversion
+- English language filtering
 - Text cleaning and normalization
 - Stopword removal
 - Word lemmatization
-- TF-IDF text vectorization
+- TF-IDF feature extraction
 - Multi-class text classification
 - Automatic model comparison
 - AI-based topic prediction
-- Influencer ranking based on engagement
-- Command-line interactive interface
+- Semantic search using Sentence Transformers
+- Cosine similarity search
+- Influencer ranking algorithm
+- Flask web application
+- Interactive web interface
 
 ---
 
-## Supported Topics
+# Supported Topics
 
 - AI
 - Finance
@@ -818,76 +830,75 @@ The project combines Natural Language Processing (NLP), Machine Learning, and an
 
 ---
 
-## Project Workflow
+# System Architecture
 
 ```
-Raw Dataset
-      │
-      ▼
-Data Preprocessing
-      │
-      ▼
-Text Cleaning
-      │
-      ▼
-TF-IDF Vectorization
-      │
-      ▼
-Model Training
-(Logistic Regression, Linear SVC, Multinomial Naive Bayes)
-      │
-      ▼
-Best Model Selection
-      │
-      ▼
-User Query
-      │
-      ▼
-Topic Prediction
-      │
-      ▼
-Influencer Ranking
-      │
-      ▼
-Top Influencer Recommendations
+                    User
+                      │
+      ┌───────────────┼────────────────┐
+      │               │                │
+      ▼               ▼                ▼
+Topic Search   AI Recommendation   Semantic Search
+      │               │                │
+      │               ▼                ▼
+      │      TF-IDF + ML Model   Sentence Transformer
+      │               │                │
+      └───────────────┴────────────────┘
+                      │
+                      ▼
+            Influencer Ranking
+                      │
+                      ▼
+          Top Influencer Recommendations
 ```
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 - Python
 - Pandas
 - NumPy
 - Scikit-learn
+- Sentence Transformers
+- PyTorch
 - NLTK
+- Flask
 - Joblib
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```
 AI_Influencer_Discovery/
 │
-├── data/
-│   └── scraped_posts (2).csv
+├── artifacts/
+│   ├── ranked_influencers.csv
+│   ├── post_embeddings.npy
+│   ├── tfidf_vectorizer.pkl
+│   └── topic_classifier.pkl
 │
-├── models/
-│   ├── topic_classifier.pkl
-│   └── tfidf_vectorizer.pkl
+├── data/
 │
 ├── src/
 │   ├── preprocessing.py
 │   ├── trainer.py
 │   ├── ranking.py
 │   ├── inference.py
-│   ├── main.py
-│   └── test_script.py
+│   ├── semantic_search.py
+│   └── main.py
 │
-├── notebooks/
-│   └── EDA.ipynb
+├── templates/
+│   ├── index.html
+│   ├── topic.html
+│   ├── recommend.html
+│   └── semantic.html
 │
+├── static/
+│   └── style.css
+│
+├── app.py
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -895,29 +906,38 @@ AI_Influencer_Discovery/
 
 ---
 
-## Machine Learning Pipeline
+# Data Preprocessing
 
-### Text Preprocessing
+The preprocessing pipeline performs the following operations:
 
 - Remove duplicate records
 - Convert timestamps
 - Merge post text and hashtags
+- Detect language
+- Keep only English posts
 - Convert text to lowercase
 - Remove URLs
 - Remove mentions
+- Remove emojis
 - Remove punctuation
 - Remove numbers
 - Remove stopwords
 - Lemmatize words
 
-### Feature Extraction
+The cleaned text is stored in the **cleaned_text** column and is later used for both Machine Learning and Semantic Search.
+
+---
+
+# Machine Learning Pipeline
+
+## Feature Extraction
 
 TF-IDF Vectorizer
 
 - Maximum Features: 10,000
 - N-grams: (1,2)
 
-### Models Evaluated
+## Models Evaluated
 
 - Logistic Regression
 - Linear Support Vector Classifier (LinearSVC)
@@ -927,9 +947,45 @@ The best-performing model is automatically selected and saved for inference.
 
 ---
 
-## Influencer Ranking
+# Semantic Search
 
-Each post receives an engagement score using a weighted formula:
+Semantic Search is implemented using the pretrained Sentence Transformer model:
+
+```
+all-MiniLM-L6-v2
+```
+
+Workflow:
+
+```
+User Query
+      │
+      ▼
+Sentence Transformer
+      │
+      ▼
+Query Embedding
+      │
+      ▼
+Cosine Similarity
+      │
+      ▼
+Top Similar Posts
+      │
+      ▼
+Influencer Ranking
+      │
+      ▼
+Recommended Influencers
+```
+
+Embeddings are generated once from the cleaned posts and stored locally for efficient retrieval.
+
+---
+
+# Influencer Ranking
+
+Each post receives an engagement score using:
 
 ```
 Engagement Score =
@@ -940,7 +996,7 @@ Engagement Score =
 
 Verified accounts receive an additional 10% engagement bonus.
 
-Each influencer is then ranked using:
+Each influencer is ranked using:
 
 ```
 Influencer Score =
@@ -953,7 +1009,25 @@ The influencers are sorted in descending order of the final score.
 
 ---
 
-## Running the Project
+# Web Application
+
+The Flask application provides three modules:
+
+### Topic Search
+
+Select a topic to view the highest-ranked influencers.
+
+### AI Recommendation
+
+Describe your interests in natural language to receive topic-specific influencer recommendations.
+
+### Semantic Search
+
+Search using free text to discover semantically related posts and influencers.
+
+---
+
+# Running the Project
 
 Clone the repository
 
@@ -967,42 +1041,57 @@ Install dependencies
 pip install -r requirements.txt
 ```
 
-Run the application
+Generate artifacts
 
 ```bash
 python src/main.py
 ```
 
----
+Run the Flask application
 
-## Example
+```bash
+python app.py
+```
+
+Open your browser:
 
 ```
-AI Influencer Discovery System
+http://127.0.0.1:5000
+```
 
-1. Search by Topic
-2. AI Recommendation
-3. Exit
+---
 
-Select Option: 2
+# Example
 
+### AI Recommendation
+
+```
 Describe what content you are interested in:
 
 Deep learning is transforming healthcare.
 
 Predicted Topic:
+
 AI
-
-Top Influencers
-
-...
 ```
 
 ---
 
-## Model Performance
+### Semantic Search
 
-The final model achieved approximately **99% accuracy** on the test dataset.
+```
+Search Query:
+
+Mental health is important for everyone.
+```
+
+The system retrieves the most semantically similar posts and recommends the highest-ranked influencers related to the query.
+
+---
+
+# Model Performance
+
+The text classification model achieved approximately **99% accuracy** on the test dataset.
 
 Evaluation metrics include:
 

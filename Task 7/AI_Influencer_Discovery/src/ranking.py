@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 
 class InfluencerRanking:
@@ -86,5 +87,41 @@ class InfluencerRanking:
         self.rank_influencers()
 
         print("Ranking Pipeline Completed")
+
+        return self.ranked_df
+
+    def save_rankings(
+        self,
+        output_path: str,
+    ):
+
+        os.makedirs(
+            os.path.dirname(output_path),
+            exist_ok=True,
+        )
+
+        self.ranked_df.to_csv(
+            output_path,
+            index=False,
+        )
+
+        print(
+            f"Rankings saved successfully:\n"
+            f"{output_path}"
+        )
+
+    def load_rankings(
+        self,
+        input_path: str,
+    ):
+
+        self.ranked_df = pd.read_csv(
+            input_path
+        )
+
+        print(
+            f"Rankings loaded successfully:\n"
+            f"{input_path}"
+        )
 
         return self.ranked_df

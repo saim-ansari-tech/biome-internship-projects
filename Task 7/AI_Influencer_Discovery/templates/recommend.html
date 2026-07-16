@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Recommendation</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>AI Influencer Recommendation</h1>
+
+<form method="POST">
+
+    <textarea
+        name="query"
+        rows="6"
+        cols="70"
+        placeholder="Describe the type of influencer you are looking for..."
+        required></textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Recommend
+    </button>
+
+</form>
+
+<br>
+
+<a href="/">Back to Home</a>
+
+{% if predicted_topic %}
+
+<h2>Predicted Topic</h2>
+
+<p><strong>{{ predicted_topic }}</strong></p>
+
+{% endif %}
+
+{% if results %}
+
+<h2>Recommended Influencers</h2>
+
+<table>
+
+<tr>
+
+    <th>Username</th>
+    <th>Followers</th>
+    <th>Avg Engagement</th>
+    <th>Influencer Score</th>
+
+</tr>
+
+{% for row in results %}
+
+<tr>
+
+    <td>{{ row.user_name }}</td>
+
+    <td>{{ row.followers }}</td>
+
+    <td>{{ "%.2f"|format(row.avg_engagement) }}</td>
+
+    <td>{{ "%.2f"|format(row.influencer_score) }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search by Topic</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Search Influencers by Topic</h1>
+
+    <form method="POST">
+
+        <select name="topic" required>
+
+            <option value="">Select a Topic</option>
+
+            {% for topic in topics %}
+                <option value="{{ topic }}">
+                    {{ topic }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/">Back to Home</a>
+
+    {% if results %}
+
+    <h2>Top Influencers</h2>
+
+    <table>
+
+        <tr>
+            <th>Username</th>
+            <th>Followers</th>
+            <th>Avg Engagement</th>
+            <th>Influencer Score</th>
+        </tr>
+
+        {% for row in results %}
+
+        <tr>
+
+            <td>{{ row.user_name }}</td>
+
+            <td>{{ row.followers }}</td>
+
+            <td>{{ "%.2f"|format(row.avg_engagement) }}</td>
+
+            <td>{{ "%.2f"|format(row.influencer_score) }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

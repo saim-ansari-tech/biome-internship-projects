@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Influencer Discovery</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>AI Influencer Discovery System</h1>
+
+    <p>
+        Find the best influencers using Topic Search,
+        AI Recommendation, or Semantic Search.
+    </p>
+
+    <div class="menu">
+
+        <a href="{{ url_for('topic') }}">
+            <button>
+                Search by Topic
+            </button>
+        </a>
+
+        <br><br>
+
+        <a href="{{ url_for('recommend') }}">
+            <button>
+                AI Recommendation
+            </button>
+        </a>
+
+        <br><br>
+
+        <a href="{{ url_for('semantic_search') }}">
+            <button>
+                Semantic Search
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

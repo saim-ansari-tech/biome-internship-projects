@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Semantic Search</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Semantic Search</h1>
+
+<form method="POST">
+
+<input
+type="text"
+name="query"
+placeholder="Search anything..."
+required>
+
+<br><br>
+
+<button type="submit">
+
+Search
+
+</button>
+
+</form>
+
+<br>
+
+<a href="/">Back to Home</a>
+
+{% if recommendations %}
+
+<h2>Recommended Influencers</h2>
+
+<table>
+
+<tr>
+
+<th>Username</th>
+<th>Followers</th>
+<th>Influencer Score</th>
+
+</tr>
+
+{% for row in recommendations %}
+
+<tr>
+
+<td>{{ row.user_name }}</td>
+
+<td>{{ row.followers }}</td>
+
+<td>{{ "%.2f"|format(row.influencer_score) }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+{% if similar_posts %}
+
+<h2>Most Similar Posts</h2>
+
+<table>
+
+<tr>
+
+<th>Username</th>
+<th>Topic</th>
+<th>Similarity</th>
+<th>Post</th>
+
+</tr>
+
+{% for row in similar_posts %}
+
+<tr>
+
+<td>{{ row.user_name }}</td>
+
+<td>{{ row.topic }}</td>
+
+<td>{{ "%.4f"|format(row.semantic_score) }}</td>
+
+<td>{{ row.post_text }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

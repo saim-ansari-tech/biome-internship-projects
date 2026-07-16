@@ -1,10 +1,14 @@
 import re
 import pandas as pd
-import string
 import os
+from ftfy import fix_text
+import emoji
+from langdetect import detect
+from langdetect.lang_detect_exception import LangDetectException
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
 
 class DataPreprocessing:
@@ -48,32 +52,60 @@ class DataPreprocessing:
 
     def preprocess_text(self, text: str):
 
-        if pd.isna(text):
+        if not isinstance(text, str):
             return ""
 
-        text = str(text).lower()
+        text = fix_text(str(text))
 
-        text = re.sub(r"https?://\S+|www\.\S+", "", text)
+        text = text.lower()
 
-        text = re.sub(r"@\w+", "", text)
+        text = re.sub(r"https?://\S+|www\.\S+", " ", text)
 
-        text = text.replace(";", " ").replace("#", "")
+        text = re.sub(r"\b(http|https|www)\b", " ", text)
 
-        text = text.translate(str.maketrans("", "", string.punctuation))
+        text = re.sub(r"@\w+", " ", text)
 
-        text = re.sub(r"\d+", "", text)
+        text = re.sub(r"#(\w+)", r"\1", text)
 
-        words = text.split()
-        if not words:
-            return ""
+        text = emoji.replace_emoji(text, replace="")
 
-        words = [
-            self.lemmatizer.lemmatize(word)
-            for word in words
-            if word not in self.stop_words
+        text = (
+            text.replace("—", " ")
+            .replace("–", " ")
+            .replace("…", " ")
+            .replace("“", " ")
+            .replace("”", " ")
+            .replace("‘", " ")
+            .replace("’", " ")
+        )
+
+        text = re.sub(r"[^\w\s]", " ", text)
+
+        text = re.sub(r"\d+", " ", text)
+
+        text = re.sub(r"\s+", " ", text).strip()
+
+        tokens = word_tokenize(text)
+
+        tokens = [
+            self.lemmatizer.lemmatize(token)
+            for token in tokens
+            if (
+                token not in self.stop_words
+                and len(token) > 2
+                and token.isascii()
+                and token not in {
+                    "source",
+                    "article",
+                    "link",
+                    "http",
+                    "https",
+                    "www",
+                }
+            )
         ]
 
-        return " ".join(words).strip()
+        return " ".join(tokens)
 
     def clean_text(self):
         self.df["cleaned_text"] = (
@@ -83,12 +115,43 @@ class DataPreprocessing:
 
         print("Text Preprocessing completed successfully")
 
+    def detect_language(self, text):
+        try:
+            return detect(str(text))
+
+        except LangDetectException:
+            return "unknown"
+
+    def keep_english_posts(self):
+
+        before = len(self.df)
+
+        self.df["language"] = (
+            self.df["combined_text"]
+            .apply(self.detect_language)
+        )
+
+        self.df = (
+            self.df[self.df["language"] == "en"]
+            .copy()
+        )
+
+        after = len(self.df)
+
+        print("=" * 60)
+        print("English Language Filtering")
+        print("=" * 60)
+        print(f"Rows Before : {before}")
+        print(f"Rows After  : {after}")
+        print(f"Removed     : {before - after}")
+
     def preprocess(self):
         print("Starting Data Preprocessing...")
 
         self.remove_duplicates()
         self.convert_timestamp()
         self.combine_text()
+        self.keep_english_posts()
         self.clean_text()
 
         print("Preprocessing Completed Successfully!")
@@ -102,3 +165,20 @@ class DataPreprocessing:
         self.df.to_csv(output_path, index=False)
 
         print(f"Processed dataset saved to:\n{output_path}")
+
+    def load_preprocessed_data(
+        self,
+        input_path: str,
+    ):
+
+        self.df = pd.read_csv(
+            input_path,
+            parse_dates=["timestamp"],
+        )
+
+        print(
+            f"Processed dataset loaded successfully:\n"
+            f"{input_path}"
+        )
+
+        return self.df
