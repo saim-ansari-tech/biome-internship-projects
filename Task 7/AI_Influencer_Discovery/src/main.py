@@ -1,8 +1,10 @@
+import pandas as pd
+from pathlib import Path
+
 from preprocessing import DataPreprocessing
 from ranking import InfluencerRanking
 from inference import TopicPredictor
 from semantic_search import SemanticSearch
-import pandas as pd
 
 
 def main():
@@ -12,9 +14,11 @@ def main():
     preprocessing = DataPreprocessing(pd.DataFrame())
     processed_df = (
         preprocessing.load_preprocessed_data(
-            r"D:\Internship_projects\biome-internship-projects"
-            r"\Task 7\AI_Influencer_Discovery"
-            r"\artifacts\processed_data.csv"
+            Path(
+                r"D:\Internship_projects\biome-internship-projects"
+                r"\Task 7\AI_Influencer_Discovery"
+                r"\artifacts\processed_data.csv"
+            )
         )
     )
 

@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from ftfy import fix_text
 import emoji
+
 from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 
