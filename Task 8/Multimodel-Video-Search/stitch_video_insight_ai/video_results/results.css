@@ -1,0 +1,197 @@
+:root {
+  --bg: #faf8ff;
+  --surface: #ffffff;
+  --surface-soft: #f2f3ff;
+  --surface-muted: #eaedff;
+  --text: #131b2e;
+  --text-muted: #434655;
+  --primary: #004ac6;
+  --primary-container: #2563eb;
+  --outline: #c3c6d7;
+  --outline-strong: #737686;
+  --success: #15803d;
+  --warning: #d97706;
+  --danger: #b91c1c;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+body.dark {
+  --bg: #0f172a;
+  --surface: #111827;
+  --surface-soft: #182235;
+  --surface-muted: #1f2937;
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --primary: #60a5fa;
+  --primary-container: #2563eb;
+  --outline: #334155;
+  --outline-strong: #64748b;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, sans-serif;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0px 4px 12px rgba(15, 23, 42, 0.03), 0px 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+body.dark .glass-card {
+  background: rgba(17, 24, 39, 0.84);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+}
+
+.cursor-pointer { cursor: pointer; }
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.12), rgba(148, 163, 184, 0.22), rgba(148, 163, 184, 0.12));
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 0.85rem;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.video-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #020617;
+}
+
+.video-shell video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.timeline-progress {
+  position: relative;
+  height: 0.5rem;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.timeline-progress .progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #004ac6, #2563eb);
+  border-radius: 999px;
+}
+
+.timeline-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.5rem;
+  height: 0.9rem;
+  border-radius: 999px;
+  background: #fbbf24;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.timeline-marker:hover::after {
+  content: attr(data-title) ' • ' attr(data-time);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: rgba(15, 23, 42, 0.95);
+  color: white;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.72rem;
+}
+
+.chapter-chip {
+  min-width: 10rem;
+  text-align: left;
+}
+
+.chapter-chip.active {
+  background: rgba(0, 74, 198, 0.16);
+  border-color: rgba(0, 74, 198, 0.5);
+  color: var(--primary);
+}
+
+.transcript-line {
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.transcript-line.active {
+  border-left-color: var(--primary);
+  background: rgba(0, 74, 198, 0.05);
+}
+
+.transcript-line mark {
+  background: rgba(245, 158, 11, 0.25);
+  color: inherit;
+  padding: 0 0.12rem;
+  border-radius: 0.2rem;
+}
+
+.result-stat-card {
+  background: var(--surface-soft);
+  border-radius: 0.9rem;
+  padding: 0.95rem;
+}
+
+.confidence-bar {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.score-high { background: linear-gradient(90deg, #15803d, #22c55e); }
+.score-mid { background: linear-gradient(90deg, #d97706, #fbbf24); }
+.score-low { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+
+.scene-card .scene-thumb {
+  height: 10rem;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.video-button {
+  border: 0;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .topbar-nav {
+    display: none;
+  }
+
+  .page-wrap {
+    margin-left: 0 !important;
+  }
+
+  .sidebar {
+    transform: translateX(-105%);
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+}
