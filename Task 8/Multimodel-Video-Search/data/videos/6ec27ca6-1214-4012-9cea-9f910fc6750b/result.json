@@ -1,0 +1,226 @@
+{
+    "video_id": "6ec27ca6-1214-4012-9cea-9f910fc6750b",
+    "transcript": {
+        "language": "en",
+        "language_probability": 1,
+        "segments": [
+            {
+                "start": 0.0,
+                "end": 5.2,
+                "text": "For example, AI has taught you that you have to make a mug and put the feature of AI in it."
+            },
+            {
+                "start": 5.2,
+                "end": 10.36,
+                "text": "You have learnt all AI and made an AI-driven coffee mug."
+            },
+            {
+                "start": 10.36,
+                "end": 14.72,
+                "text": "Then you came to know that the market where I am sitting, there is no buying a 5,000 mug."
+            },
+            {
+                "start": 14.72,
+                "end": 20.88,
+                "text": "The mug is fine, the feature is fine, the branding is fine, the promotion is fine, the technology is fine."
+            },
+            {
+                "start": 20.88,
+                "end": 24.76,
+                "text": "But you have not done business model feasibility analysis for two years."
+            },
+            {
+                "start": 24.76,
+                "end": 30.840000000000003,
+                "text": "And people are going to this extent that what is someone selling, what is someone selling, what are they doing?"
+            },
+            {
+                "start": 30.840000000000003,
+                "end": 34.44,
+                "text": "Oh brother, first of all, do a business model analysis."
+            },
+            {
+                "start": 34.44,
+                "end": 37.52,
+                "text": "Then I gave it to a kid. He has been working for two years."
+            },
+            {
+                "start": 37.52,
+                "end": 40.120000000000005,
+                "text": "He took money from a non-technical investor."
+            },
+            {
+                "start": 40.120000000000005,
+                "end": 47.760000000000005,
+                "text": "He made a product that is GPO intensive and he does not know about the availability of GPO and the cost."
+            },
+            {
+                "start": 47.76,
+                "end": 54.879999999999995,
+                "text": "Brother, I asked him the same thing that when it becomes, you fly it to a 1 km drone."
+            },
+            {
+                "start": 54.879999999999995,
+                "end": 59.16,
+                "text": "If it takes a 1 km footage, there will be thousands of frames inside it."
+            },
+            {
+                "start": 59.16,
+                "end": 63.68,
+                "text": "When the model train is processed by those thousands of frames, then where will the GPO come from?"
+            },
+            {
+                "start": 63.68,
+                "end": 67.68,
+                "text": "I said, sir, what is GPO? What about that kid? What is that idea?"
+            },
+            {
+                "start": 67.68,
+                "end": 69.28,
+                "text": "And here we know why."
+            },
+            {
+                "start": 69.28,
+                "end": 76.6,
+                "text": "Because here, at any stage or at any video, someone motivates you so much that we forget this analysis."
+            },
+            {
+                "start": 76.64000000000001,
+                "end": 78.88000000000001,
+                "text": "We forget to criticize."
+            },
+            {
+                "start": 78.88000000000001,
+                "end": 83.44000000000001,
+                "text": "So for God's sake, if you're going to develop a product, develop a business, do the research,"
+            },
+            {
+                "start": 83.44000000000001,
+                "end": 90.56,
+                "text": "critical analysis and go to a subject matter expert, maybe in a right industry, ask them, what is your problem?"
+            },
+            {
+                "start": 90.56,
+                "end": 97.44000000000001,
+                "text": "And when you will be pushed again and again, then you will have an intellectual sense about that one particular idea."
+            },
+            {
+                "start": 97.44000000000001,
+                "end": 100.60000000000001,
+                "text": "And if that idea fails, then trust me, you will not fail."
+            },
+            {
+                "start": 100.60000000000001,
+                "end": 101.88000000000001,
+                "text": "Because you make it better than that."
+            },
+            {
+                "start": 101.88000000000001,
+                "end": 103.88000000000001,
+                "text": "You will solve the problem of that field."
+            }
+        ]
+    },
+    "summary": {
+        "summary": "...",
+        "chapters": [
+            {
+                "title": "...",
+                "start_time": 0.0,
+                "description": "..."
+            },
+            {
+                "title": "Importance of Business Model Feasibility Analysis",
+                "start_time": 0.0,
+                "description": "The speaker stresses the need for thorough analysis before launching a product. It is important to understand the market, target audience, and potential challenges. The speaker also encourages seeking advice from subject matter experts and being open to criticism and feedback."
+            }
+        ]
+    },
+    "scenes_metadata": [
+        {
+            "scene_id": 1,
+            "timestamp": 12.3289835,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_001.jpg",
+            "description": "A man is standing at a podium with a blue logo on it. He is wearing a suit and tie."
+        },
+        {
+            "scene_id": 2,
+            "timestamp": 26.860166999999997,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_002.jpg",
+            "description": "A group of people are sitting in a lecture hall."
+        },
+        {
+            "scene_id": 3,
+            "timestamp": 37.3039335,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_003.jpg",
+            "description": "A man is standing at a podium with a blue plaque on it. He is wearing a suit and tie."
+        },
+        {
+            "scene_id": 4,
+            "timestamp": 46.59654999999999,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_004.jpg",
+            "description": "A group of people are sitting in a theater with their heads bowed."
+        },
+        {
+            "scene_id": 5,
+            "timestamp": 55.63891649999999,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_005.jpg",
+            "description": "A man is standing at a podium with a blue emblem on it. He is wearing a suit and tie."
+        },
+        {
+            "scene_id": 6,
+            "timestamp": 64.91485,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_006.jpg",
+            "description": "A group of people are sitting in a lecture hall. The seats are teal and the walls are white."
+        },
+        {
+            "scene_id": 7,
+            "timestamp": 76.8768,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_007.jpg",
+            "description": "A man is standing at a podium with a blue emblem on it. He is wearing a suit and tie."
+        },
+        {
+            "scene_id": 8,
+            "timestamp": 89.0222665,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_008.jpg",
+            "description": "A group of people are sitting in a lecture hall. The people are dressed in various colors, including pink, green, and purple. There are chairs and tables in the room."
+        },
+        {
+            "scene_id": 9,
+            "timestamp": 97.097,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_009.jpg",
+            "description": "A man is standing at a podium with a blue plaque on it. He is wearing a suit and tie."
+        },
+        {
+            "scene_id": 10,
+            "timestamp": 103.93716666666666,
+            "image_path": "data\\keyframes\\6ec27ca6-1214-4012-9cea-9f910fc6750b\\scene_010.jpg",
+            "description": "The image is completely black. There are no objects, people, actions, or visible text present in the image."
+        }
+    ],
+    "chunks": [
+        {
+            "chunk_id": 1,
+            "video_id": "6ec27ca6-1214-4012-9cea-9f910fc6750b",
+            "start_time": 0.0,
+            "end_time": 47.760000000000005,
+            "text": "For example, AI has taught you that you have to make a mug and put the feature of AI in it. You have learnt all AI and made an AI-driven coffee mug. Then you came to know that the market where I am sitting, there is no buying a 5,000 mug. The mug is fine, the feature is fine, the branding is fine, the promotion is fine, the technology is fine. But you have not done business model feasibility analysis for two years. And people are going to this extent that what is someone selling, what is someone selling, what are they doing? Oh brother, first of all, do a business model analysis. Then I gave it to a kid. He has been working for two years. He took money from a non-technical investor. He made a product that is GPO intensive and he does not know about the availability of GPO and the cost."
+        },
+        {
+            "chunk_id": 2,
+            "video_id": "6ec27ca6-1214-4012-9cea-9f910fc6750b",
+            "start_time": 47.76,
+            "end_time": 97.44000000000001,
+            "text": "Brother, I asked him the same thing that when it becomes, you fly it to a 1 km drone. If it takes a 1 km footage, there will be thousands of frames inside it. When the model train is processed by those thousands of frames, then where will the GPO come from? I said, sir, what is GPO? What about that kid? What is that idea? And here we know why. Because here, at any stage or at any video, someone motivates you so much that we forget this analysis. We forget to criticize. So for God's sake, if you're going to develop a product, develop a business, do the research, critical analysis and go to a subject matter expert, maybe in a right industry, ask them, what is your problem? And when you will be pushed again and again, then you will have an intellectual sense about that one particular idea."
+        },
+        {
+            "chunk_id": 3,
+            "video_id": "6ec27ca6-1214-4012-9cea-9f910fc6750b",
+            "start_time": 97.44000000000001,
+            "end_time": 103.88000000000001,
+            "text": "And if that idea fails, then trust me, you will not fail. Because you make it better than that. You will solve the problem of that field."
+        }
+    ],
+    "video_filename": "6ec27ca6-1214-4012-9cea-9f910fc6750b.mp4",
+    "video_path": "data\\uploads\\6ec27ca6-1214-4012-9cea-9f910fc6750b.mp4"
+}

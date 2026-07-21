@@ -1,7 +1,13 @@
 from pipeline import process_video
 
-VIDEO_PATH = r"D:\Internship\biome-internship-projects\Task 8\Multimodel-Video-Search\data\audio\video.mp4"
-KEYFRAME_OUTPUT_DIR = r"D:\Internship\biome-internship-projects\Task 8\Multimodel-Video-Search\data\keyframes"
+VIDEO_PATH = (
+    r"D:\Internship\biome-internship-projects"
+    r"\Task 8\Multimodel-Video-Search\data\audio\video2.mp4"
+)
+KEYFRAME_OUTPUT_DIR = (
+    r"D:\Internship\biome-internship-projects"
+    r"\Task 8\Multimodel-Video-Search\data\keyframes"
+)
 
 result = process_video(
     video_path=VIDEO_PATH,
@@ -12,7 +18,7 @@ result = process_video(
 print("VIDEO SUMMARY")
 
 
-print(result["summary"]["summary"])
+print(result["summary"])
 
 
 print("CHAPTERS")

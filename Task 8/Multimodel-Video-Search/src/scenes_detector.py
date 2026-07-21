@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from scenedetect import open_video, SceneManager
 from scenedetect.detectors import ContentDetector
 

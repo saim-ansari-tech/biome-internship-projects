@@ -60,9 +60,9 @@ eda.ipynb
 
 tfidf_vectorizer.pkl
 topic_classifier.pkl
-data/
 models/
-stitch_video_insight_ai/
-templates/
 uploads/
 /ven
+.env
+../.vscode/
+/Multimodel-Video-Search.zip

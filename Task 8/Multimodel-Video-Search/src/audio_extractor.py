@@ -1,13 +1,25 @@
+import os
+from pathlib import Path
 from audio_extract import extract_audio
 
-from audio_extract import extract_audio
 
-
-def extract_audio_from_video(input_path: str, output_path: str, output_format: str = "wav"):
+def extract_audio_from_video(
+    input_path: str,
+    output_dir: str,
+    output_format: str = "wav"
+):
     try:
-        extract_audio(input_path, output_path, output_format)
-        print(f"Audio extracted successfully: {output_path}")
-        return output_path
+        video_name = Path(input_path).stem
+        output_path = Path(output_dir) / f"{video_name}_audio"
+
+        output_file = f"{output_path}.{output_format}"
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+        extract_audio(input_path, str(output_path), output_format)
+        audio_file = f"{output_path}.{output_format}"
+        print(f'Audio extracted successfully: {audio_file}')
+        return audio_file
 
     except FileNotFoundError:
         raise FileNotFoundError(f"Input video not found: {input_path}")
@@ -17,5 +29,3 @@ def extract_audio_from_video(input_path: str, output_path: str, output_format: s
 
     except Exception as e:
         raise RuntimeError(f"Failed to extract audio: {e}")
-
-

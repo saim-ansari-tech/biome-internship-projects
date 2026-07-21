@@ -1,8 +1,12 @@
+import uuid
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
     VectorParams,
-    PointStruct
+    PointStruct,
+    Filter,
+    FieldCondition,
+    MatchValue
 )
 
 from sentence_transformers import SentenceTransformer
@@ -14,6 +18,7 @@ embedding_model = SentenceTransformer(
 client = QdrantClient(
     url="http://localhost:6333"
 )
+
 
 def create_collection():
     collections = client.get_collections().collections
@@ -49,11 +54,15 @@ def store_chunks(embedded_chunks):
 
             PointStruct(
 
-                id=chunk["chunk_id"],
+                id=str(uuid.uuid4()),
 
                 vector=chunk["embedding"],
 
                 payload={
+
+                    "video_id": chunk["video_id"],
+
+                    "chunk_id": chunk["chunk_id"],
 
                     "text": chunk["text"],
 
@@ -75,15 +84,25 @@ def store_chunks(embedded_chunks):
     print(f"{len(points)} chunks inserted.")
 
 
-def search(query, top_k=3):
+def search(query, video_id, top_k=3):
 
     query_embedding = embedding_model.encode(
         query
     ).tolist()
 
-    results = client.search(
+    results = client.query_points(
         collection_name="multimodal",
-        query_vector=query_embedding,
+        query=query_embedding,
+        query_filter=Filter(
+            must=[
+                FieldCondition(
+                    key="video_id",
+                    match=MatchValue(
+                        value=video_id
+                    )
+                )
+            ]
+        ),
         limit=top_k
     )
 

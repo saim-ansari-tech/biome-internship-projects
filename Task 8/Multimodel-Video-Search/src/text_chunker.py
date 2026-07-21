@@ -1,5 +1,6 @@
 def chunk_transcript(
     segments: list,
+    video_id: str,
     max_words: int = 150
 ):
 
@@ -30,6 +31,7 @@ def chunk_transcript(
             chunks.append(
                 {
                     "chunk_id": chunk_id,
+                    "video_id": video_id,
                     "start_time": chunk_start,
                     "end_time": chunk_end,
                     "text": " ".join(chunk_text)
@@ -49,6 +51,7 @@ def chunk_transcript(
         chunks.append(
             {
                 "chunk_id": chunk_id,
+                "video_id": video_id,
                 "start_time": chunk_start,
                 "end_time": chunk_end,
                 "text": " ".join(chunk_text)

@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VideoMind AI | Results</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#004ac6',
+            secondary: '#712ae2',
+            tertiary: '#943700',
+            background: '#faf8ff',
+            surface: '#ffffff',
+            surfaceSoft: '#f2f3ff',
+            surfaceMuted: '#eaedff',
+            text: '#131b2e',
+            textMuted: '#434655'
+          }
+        }
+      }
+    };
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/css/results.css" />
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex">
+  <div id="overlay" class="overlay"></div>
+
+  <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-72 bg-surface-soft border-r border-outline-variant/30 py-lg z-40 hidden md:flex flex-col">
+    <div class="px-lg mb-xl flex items-center gap-md">
+      <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary">psychology</span>
+      </div>
+      <div>
+        <h1 class="font-headline-md text-headline-md text-primary leading-tight">VideoMind AI</h1>
+        <p class="font-label-upper text-[10px] tracking-widest text-on-surface-variant uppercase">Multimodal Video Intelligence</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-sm space-y-xs">
+      <a class="sidebar-link flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant hover:text-on-surface" data-nav="../dashboard_1/index.html"><span class="material-symbols-outlined">dashboard</span><span class="font-label-upper text-label-upper">Dashboard</span></a>
+      <a class="sidebar-link flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant hover:text-on-surface" data-nav="../dashboard_1/index.html"><span class="material-symbols-outlined">upload_file</span><span class="font-label-upper text-label-upper">Upload</span></a>
+      <a class="sidebar-link flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant hover:text-on-surface" data-nav="../processing_video/processing.html"><span class="material-symbols-outlined">sync</span><span class="font-label-upper text-label-upper">Processing</span></a>
+      <a class="sidebar-link active flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer bg-secondary-container text-on-secondary-container font-bold transition-all" data-nav="results.html"><span class="material-symbols-outlined">analytics</span><span class="font-label-upper text-label-upper">Results</span></a>
+      <a class="sidebar-link flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant hover:text-on-surface" data-nav="../semantic_search/search.html"><span class="material-symbols-outlined">manage_search</span><span class="font-label-upper text-label-upper">Semantic Search</span></a>
+      <a class="sidebar-link flex items-center gap-md p-md mx-sm rounded-lg cursor-pointer hover:bg-surface-container-high transition-all text-on-surface-variant hover:text-on-surface" data-nav="../settings/settings.html"><span class="material-symbols-outlined">settings</span><span class="font-label-upper text-label-upper">Settings</span></a>
+    </nav>
+  </aside>
+
+  <main class="flex-1 md:ml-72 flex flex-col min-h-screen page-wrap">
+    <header class="fixed top-0 right-0 left-0 md:left-72 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 h-16 flex justify-between items-center px-lg z-30 shadow-sm">
+      <div class="flex items-center gap-md">
+        <button id="menuButton" class="material-symbols-outlined text-primary md:hidden" type="button">menu</button>
+        <span class="font-body-base text-body-base text-primary font-bold">Analysis Results</span>
+        <span class="text-outline-variant hidden sm:inline">/</span>
+        <span id="fileNameLabel" class="font-body-base text-body-base text-on-surface-variant">Loading...</span>
+      </div>
+      <div class="flex items-center gap-lg">
+        <button id="themeToggle" class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" type="button">dark_mode</button>
+        <div class="h-8 w-8 rounded-full bg-primary-fixed overflow-hidden border border-outline-variant/50">
+          <img class="w-full h-full object-cover" alt="User avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgXZi_uPYmiJQbGc7EMyXj4vxkVPDoWreosd_8bojHklL6jsth0bkzwcpgTKXcu1xnnIpsnY8XSmaeZvL9v1ZZpMavmxxat6FthVf59TiURWAi6Vr8qukxOopypgwr3AgseOH03_qAG0zuiNRFgc9X6CtLMNqNaPWw3qUkP8uJrxoahxxzdPaDSE8V4ikkog-dTN5-673AQ9pxAA5i1BpO68xp3zExb7PeLA0UiBLCTYOLoJZjnl7uiA" />
+        </div>
+      </div>
+    </header>
+
+    <div class="pt-24 px-lg pb-xl max-w-container-max mx-auto w-full">
+      <div id="loadingShell" class="space-y-lg">
+        <div class="skeleton h-10 w-80"></div>
+        <div class="skeleton h-5 w-full max-w-2xl"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+          <div class="lg:col-span-7 space-y-lg">
+            <div class="skeleton aspect-video rounded-xl"></div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="skeleton h-20 rounded-xl"></div>
+              <div class="skeleton h-20 rounded-xl"></div>
+              <div class="skeleton h-20 rounded-xl"></div>
+              <div class="skeleton h-20 rounded-xl"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-5 space-y-lg">
+            <div class="skeleton h-48 rounded-xl"></div>
+            <div class="skeleton h-72 rounded-xl"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="contentShell" class="hidden space-y-lg">
+        <div class="mb-lg flex flex-col lg:flex-row justify-between items-start lg:items-end gap-3">
+          <div>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-xs">Analysis: Video Intelligence</h2>
+            <p class="text-on-surface-variant font-body-base">Detailed breakdown of semantic concepts, temporal boundaries, and transcription data.</p>
+          </div>
+          <div class="flex flex-wrap gap-sm">
+            <button id="exportJson" class="flex items-center gap-xs px-md py-sm bg-surface-container-high rounded-lg font-label-upper text-label-upper text-primary hover:bg-primary hover:text-on-primary transition-all"><span class="material-symbols-outlined text-[18px]">download</span>Export JSON</button>
+            <button id="exportTxt" class="flex items-center gap-xs px-md py-sm bg-surface-container-high rounded-lg font-label-upper text-label-upper text-primary hover:bg-primary hover:text-on-primary transition-all"><span class="material-symbols-outlined text-[18px]">article</span>Export TXT</button>
+            <button id="exportPdf" class="flex items-center gap-xs px-md py-sm bg-surface-container-high rounded-lg font-label-upper text-label-upper text-primary hover:bg-primary hover:text-on-primary transition-all"><span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>Export PDF</button>
+            <button id="exportTranscript" class="flex items-center gap-xs px-md py-sm bg-surface-container-high rounded-lg font-label-upper text-label-upper text-primary hover:bg-primary hover:text-on-primary transition-all"><span class="material-symbols-outlined text-[18px]">subtitles</span>Export Transcript</button>
+            <button id="copyLink" class="flex items-center gap-xs px-md py-sm bg-primary rounded-lg font-label-upper text-label-upper text-on-primary hover:opacity-90 transition-all"><span class="material-symbols-outlined text-[18px]">link</span>Copy Link</button>
+            <button id="copySummary" class="flex items-center gap-xs px-md py-sm bg-primary rounded-lg font-label-upper text-label-upper text-on-primary hover:opacity-90 transition-all"><span class="material-symbols-outlined text-[18px]">content_copy</span>Copy Summary</button>
+            <button id="downloadReport" class="flex items-center gap-xs px-md py-sm bg-primary rounded-lg font-label-upper text-label-upper text-on-primary hover:opacity-90 transition-all"><span class="material-symbols-outlined text-[18px]">share</span>Download Report</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+          <div class="lg:col-span-7 flex flex-col gap-lg">
+            <div class="glass-card rounded-xl overflow-hidden p-2">
+              <div class="video-shell">
+                <video id="videoPlayer" controls playsinline preload="metadata"></video>
+              </div>
+              <div class="mt-3 px-2 pb-2">
+                <div id="progressTrack" class="timeline-progress">
+                  <div id="progressFill" class="progress-bar"></div>
+                </div>
+                <div class="mt-3 flex justify-between items-center gap-3 text-[12px] font-mono-code text-on-surface-variant">
+                  <span id="currentTimeLabel">00:00 / 00:00</span>
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-[18px]">volume_up</span>
+                    <span class="material-symbols-outlined text-[18px]">speed</span>
+                    <span class="material-symbols-outlined text-[18px]">fullscreen</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="videoMetadataCard" class="glass-card rounded-xl p-lg">
+              <div class="flex items-center gap-sm mb-lg">
+                <span class="material-symbols-outlined text-primary">info</span>
+                <h3 class="font-headline-md text-[18px] text-on-surface">Video Information</h3>
+              </div>
+              <div id="metadataGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-md"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center justify-between gap-3 mb-lg">
+                <div class="flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary">description</span>
+                  <h3 class="font-headline-md text-[18px] text-on-surface">Summary</h3>
+                </div>
+                <button id="summaryCopy" class="rounded-full border px-3 py-1 text-xs">Copy</button>
+              </div>
+              <div id="summaryText" class="text-body-base text-on-surface-variant leading-relaxed"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center justify-between gap-3 mb-lg">
+                <div class="flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary">search</span>
+                  <h3 class="font-headline-md text-[18px] text-on-surface">Transcript</h3>
+                </div>
+                <button id="transcriptCopy" class="rounded-full border px-3 py-1 text-xs">Copy</button>
+              </div>
+              <div class="mb-4">
+                <input id="transcriptSearch" class="w-full rounded-lg border border-outline px-4 py-3" type="text" placeholder="Search inside transcript..." />
+              </div>
+              <div id="transcriptContainer" class="space-y-2"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center gap-sm mb-lg">
+                <span class="material-symbols-outlined text-primary">image_search</span>
+                <h3 class="font-headline-md text-[18px] text-on-surface">Detected Keyframes</h3>
+              </div>
+              <div id="keyframesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-md"></div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 flex flex-col gap-lg">
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center gap-sm mb-lg">
+                <span class="material-symbols-outlined text-primary">segment</span>
+                <h3 class="font-headline-md text-[18px] text-on-surface">Interactive Chapter Timeline</h3>
+              </div>
+              <div id="chapterTimeline" class="flex flex-wrap gap-3"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center gap-sm mb-lg">
+                <span class="material-symbols-outlined text-primary">playlist_play</span>
+                <h3 class="font-headline-md text-[18px] text-on-surface">Chapters</h3>
+              </div>
+              <div id="chapterList" class="custom-scrollbar max-h-[500px] overflow-y-auto pr-xs relative timeline-line"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center justify-between gap-3 mb-lg">
+                <div class="flex items-center gap-sm">
+                  <span class="material-symbols-outlined text-primary">visibility</span>
+                  <h3 class="font-headline-md text-[18px] text-on-surface">Detected Scenes</h3>
+                </div>
+                <button id="sceneCopy" class="rounded-full border px-3 py-1 text-xs">Copy</button>
+              </div>
+              <div id="scenesList" class="space-y-3"></div>
+            </div>
+
+            <div class="glass-card rounded-xl p-lg">
+              <div class="flex items-center gap-sm mb-lg">
+                <span class="material-symbols-outlined text-primary">analytics</span>
+                <h3 class="font-headline-md text-[18px] text-on-surface">Processing Statistics</h3>
+              </div>
+              <div id="statsGrid" class="grid grid-cols-2 gap-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <section class="mt-xl">
+          <div class="flex items-center gap-md mb-lg">
+            <span class="material-symbols-outlined text-primary">data_usage</span>
+            <h3 class="font-headline-md text-headline-md text-on-surface">Analysis Status</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+            <div class="glass-card rounded-xl p-lg border-l-4 border-primary">
+              <div class="flex justify-between items-start mb-sm">
+                <span class="font-label-upper text-label-upper text-on-surface-variant">Transcription</span>
+                <span class="material-symbols-outlined text-primary">check_circle</span>
+              </div>
+              <div class="font-display-lg text-[24px] text-on-surface">100%</div>
+              <p class="text-body-sm text-on-surface-variant mt-xs">Completed by Whisper Large-v3</p>
+            </div>
+            <div class="glass-card rounded-xl p-lg border-l-4 border-secondary">
+              <div class="flex justify-between items-start mb-sm">
+                <span class="font-label-upper text-label-upper text-on-surface-variant">Object Detection</span>
+                <span class="material-symbols-outlined text-secondary">check_circle</span>
+              </div>
+              <div class="font-display-lg text-[24px] text-on-surface">100%</div>
+              <p class="text-body-sm text-on-surface-variant mt-xs">Detected keyframes and scene descriptions</p>
+            </div>
+            <div class="glass-card rounded-xl p-lg border-l-4 border-tertiary">
+              <div class="flex justify-between items-start mb-sm">
+                <span class="font-label-upper text-label-upper text-on-surface-variant">Summary Confidence</span>
+                <span class="material-symbols-outlined text-tertiary">auto_awesome</span>
+              </div>
+              <div class="font-display-lg text-[24px] text-on-surface">95%</div>
+              <p class="text-body-sm text-on-surface-variant mt-xs">AI summary confidence score</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="bg-surface border-t border-outline-variant/10 w-full py-xl px-2xl mt-auto flex flex-col md:flex-row justify-between items-center">
+      <div class="font-label-upper text-label-upper opacity-50 text-on-surface-variant mb-md md:mb-0">© 2026 VideoMind AI. Powered by Whisper Large v3, SmolVLM, Sentence Transformers, Qdrant, Flask, OpenCV, and FFmpeg.</div>
+      <div class="flex items-center flex-wrap justify-center gap-3">
+        <a class="inline-block mx-md font-body-sm text-body-sm text-outline hover:text-primary transition-colors" href="#">Documentation</a>
+        <a class="inline-block mx-md font-body-sm text-body-sm text-outline hover:text-primary transition-colors" href="#">API</a>
+        <a class="inline-block mx-md font-body-sm text-body-sm text-outline hover:text-primary transition-colors" href="#">Support</a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="static/js/results.js"></script>
+</body>
+</html>

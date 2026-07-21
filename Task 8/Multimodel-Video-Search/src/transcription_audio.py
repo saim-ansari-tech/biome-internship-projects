@@ -1,12 +1,12 @@
-from faster_whisper import WhisperModel
 from pathlib import Path
+from faster_whisper import WhisperModel
 
 
 def transcribe_audio(audio_path: str):
     model = WhisperModel(
         "small",
-        device = "cuda",
-        compute_type = "float16"
+        device="cuda",
+        compute_type="float16"
     )
     audio_path = Path(audio_path)
     print("Model succesfully transcribe the audio")
@@ -31,6 +31,5 @@ def transcribe_audio(audio_path: str):
     return {
         "language": info.language,
         "language_probability": info.language_probability,
-        "segments": segments
+        "segments": segment_data
     }
-

@@ -1,8 +1,6 @@
+import torch
 from PIL import Image
 from transformers import AutoProcessor, AutoModelForImageTextToText
-import torch
-
-from frames_extractor import extract_frames
 
 MODEL_NAME = "HuggingFaceTB/SmolVLM2-2.2B-Instruct"
 
@@ -14,6 +12,7 @@ model = AutoModelForImageTextToText.from_pretrained(
     device_map="auto",
     attn_implementation="eager"
 )
+
 
 def generate_scene_description(frames_metadata: list):
     results = []
@@ -78,5 +77,3 @@ def generate_scene_description(frames_metadata: list):
         results.append(scene_info)
 
     return results
-
-

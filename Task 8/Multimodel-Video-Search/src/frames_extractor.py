@@ -1,6 +1,6 @@
 import cv2
 from pathlib import Path
-from scenes_detector import detect_scenes
+from src.scenes_detector import detect_scenes
 
 
 def extract_frames(video_path: str, output_dir: str):
@@ -9,7 +9,7 @@ def extract_frames(video_path: str, output_dir: str):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         raise Exception("Could not open video.")
-    
+
     frames_metadata = []
     for scene_id, scene in enumerate(scene_list, start=1):
         start, end = scene
@@ -21,7 +21,7 @@ def extract_frames(video_path: str, output_dir: str):
         cap.set(
             cv2.CAP_PROP_POS_MSEC,
             middle_ms
-        ) 
+        )
         success, frame = cap.read()
 
         if not success:
