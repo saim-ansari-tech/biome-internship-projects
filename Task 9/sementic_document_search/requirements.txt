@@ -1,0 +1,10 @@
+langchain-community
+langchain-text-splitter
+langchain-huggingface
+langchain-qdrant
+sentence-transformers
+google-genai
+python-dotenv
+pypdf
+docx2txt
+flask

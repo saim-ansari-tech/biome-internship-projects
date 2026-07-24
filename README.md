@@ -1101,7 +1101,28 @@ Evaluation metrics include:
 - F1-score
 - Confusion Matrix
 
+
+## Task 9 - Sementic Document Search
+# Semantic Document Search System
+
+A semantic document search system that retrieves relevant document passages based on **meaning rather than exact keyword matching**.
+
+Traditional keyword search can fail when users use different words to describe the same concept. For example, a user searching for:
+
+> "How do I reset my password?"
+
+may not find a document containing:
+
+> "Account credential recovery steps"
+
+even though the document is highly relevant.
+
+This project solves this problem using **semantic embeddings** and **vector similarity search**. Documents are loaded, split into meaningful chunks, converted into vector embeddings, stored in a Qdrant vector database, and retrieved using natural-language queries.
+
+An optional Gemini-powered RAG component generates a concise answer based only on the retrieved document context.
+
 ---
+
 
 ## Task 8 - Multimodel Video Search AI
 
@@ -1140,6 +1161,276 @@ Evaluation metrics include:
 | **Vector Database** | Qdrant |
 | **LLM** | Groq API (Llama 3.1 8B Instant) |
 | **Audio Extraction** | FFmpeg (via audio_extract) |
+=======
+## Features
+
+* Upload documents through a Flask web interface.
+* Supports:
+
+  * `.txt`
+  * `.pdf`
+  * `.docx`
+* Automatic document type detection.
+* Document loading using LangChain document loaders.
+* Splitting of long documents into smaller meaningful chunks.
+* Semantic embeddings using `all-MiniLM-L6-v2`.
+* Local vector storage using Qdrant.
+* Natural-language semantic search.
+* Top-K relevant passages retrieval.
+* Similarity scores for retrieved results.
+* Gemini-powered AI answers based on retrieved context.
+* Displays both:
+
+  * AI-generated answer
+  * Retrieved document passages
+
+---
+
+## System Architecture
+
+```text
+                    User
+                     │
+                     ▼
+              Flask Web Interface
+                     │
+                     │ Upload Document
+                     ▼
+              File Type Detection
+                     │
+          ┌──────────┼──────────┐
+          │          │          │
+          ▼          ▼          ▼
+         TXT        PDF        DOCX
+          │          │          │
+          ▼          ▼          ▼
+     TextLoader  PyPDFLoader  Docx2txtLoader
+          │          │          │
+          └──────────┼──────────┘
+                     │
+                     ▼
+              Loaded Documents
+                     │
+                     ▼
+       RecursiveCharacterTextSplitter
+                     │
+                     ▼
+                Text Chunks
+                     │
+                     ▼
+          Hugging Face Embeddings
+          all-MiniLM-L6-v2
+                     │
+                     ▼
+                Vector Embeddings
+                     │
+                     ▼
+               Qdrant Vector DB
+                     │
+                     │
+                     │ User Query
+                     ▼
+             Query Embedding
+                     │
+                     ▼
+            Similarity Search
+                     │
+                     ▼
+                Top-K Chunks
+                     │
+              ┌──────┴──────┐
+              │             │
+              ▼             ▼
+       Search Results     Gemini LLM
+              │             │
+              │             ▼
+              │        AI Generated
+              │           Answer
+              │             │
+              └──────┬──────┘
+                     │
+                     ▼
+                Flask UI
+```
+
+---
+
+## Project Workflow
+
+### 1. Document Upload
+
+The user uploads a supported document through the Flask web application.
+
+Supported formats:
+
+```text
+.txt
+.pdf
+.docx
+```
+
+The application determines the document type based on its file extension.
+
+---
+
+### 2. Document Loading
+
+LangChain document loaders are used to extract the content.
+
+| File Type | Loader           |
+| --------- | ---------------- |
+| TXT       | `TextLoader`     |
+| PDF       | `PyPDFLoader`    |
+| DOCX      | `Docx2txtLoader` |
+
+The output is converted into LangChain `Document` objects.
+
+---
+
+### 3. Document Splitting
+
+Long documents are divided into smaller chunks using:
+
+```python
+RecursiveCharacterTextSplitter
+```
+
+The current configuration uses:
+
+```text
+Chunk Size: 500
+Chunk Overlap: 50
+```
+
+Chunking improves retrieval because the embedding model can represent smaller, focused sections of the document.
+
+---
+
+### 4. Embedding Generation
+
+Each document chunk is converted into a numerical vector using:
+
+```text
+sentence-transformers/all-MiniLM-L6-v2
+```
+
+The embedding represents the semantic meaning of the text.
+
+For example:
+
+```text
+Query:
+How can I recover my account?
+
+Document:
+Steps for account credential recovery
+```
+
+Even though the exact words are different, their semantic meaning can be similar in vector space.
+
+---
+
+### 5. Vector Storage
+
+The generated embeddings are stored in a local Qdrant vector database.
+
+Qdrant runs locally using Docker.
+
+The application connects to:
+
+```text
+http://localhost:6333
+```
+
+Qdrant is responsible for storing vectors and performing similarity searches.
+
+---
+
+### 6. Semantic Search
+
+When the user enters a query:
+
+```text
+What are the requirements for weather forecasting?
+```
+
+the query is converted into an embedding using the same embedding model.
+
+The query vector is then compared with the document vectors stored in Qdrant.
+
+The system retrieves the most semantically similar document chunks.
+
+The result contains:
+
+```text
+Document Chunk
+Similarity Score
+Metadata
+```
+
+---
+
+### 7. AI Answer Generation
+
+The retrieved chunks are passed to Gemini as context.
+
+The LLM is instructed to answer the user's question using only the retrieved document context.
+
+The final interface displays:
+
+```text
+AI Answer
+    │
+    ▼
+Gemini-generated response
+
+Search Results
+    │
+    ├── Retrieved Chunk 1
+    ├── Retrieved Chunk 2
+    └── Retrieved Chunk 3
+```
+
+This architecture follows the basic principles of a **Retrieval-Augmented Generation (RAG)** system.
+
+---
+
+## Technologies Used
+
+### Backend
+
+* Python
+* Flask
+
+### Document Processing
+
+* LangChain
+* `TextLoader`
+* `PyPDFLoader`
+* `Docx2txtLoader`
+* `RecursiveCharacterTextSplitter`
+
+### Embeddings
+
+* Hugging Face
+* Sentence Transformers
+* `all-MiniLM-L6-v2`
+
+### Vector Database
+
+* Qdrant
+* Docker
+
+### LLM
+
+* Google Gemini
+
+### Frontend
+
+* HTML
+* CSS
+* JavaScript
+>>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 ---
 
@@ -1189,9 +1480,45 @@ VideoMind-AI/
     ├── audio/                      # Extracted audio files
     ├── keyframes/                  # Scene keyframes
     └── videos/                     # JSON analysis results
+=======
+```text
+semantic_doc_search/
+│
+├── app.py
+│
+├── main.py
+│
+├── requirements.txt
+│
+├── .env
+│
+├── src/
+│   ├── __init__.py
+│   │
+│   ├── document_loader.py
+│   │
+│   ├── document_splitter.py
+│   │
+│   ├── vector_store.py
+│   │
+│   ├── sementic_search.py
+│   │
+│   └── llm_generator.py
+│
+├── templates/
+│   └── index.html
+│
+├── static/
+│   └── css/
+│       └── style.css
+│
+└── data/
+    └── documents/
+>>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 ```
 
 ---
+
 
 ## Prerequisites
 
@@ -1253,10 +1580,124 @@ docker run -p 6333:6333 qdrant/qdrant
 ```
 
 ### 5. Run the Application
+=======
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+```
+
+Move into the project directory:
+
+```bash
+cd semantic_doc_search
+```
+
+---
+
+### 2. Create a Virtual Environment
+
+Using Conda:
+
+```bash
+conda create -n semantic_doc_search python=3.12
+```
+
+Activate the environment:
+
+```bash
+conda activate semantic_doc_search
+```
+
+Or using Python's built-in virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate on Windows:
+
+```powershell
+venv\Scripts\activate
+```
+
+---
+
+### 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Qdrant Setup
+
+Qdrant is used as the local vector database.
+
+Make sure Docker Desktop is running.
+
+Start Qdrant using:
+
+```bash
+docker run -d -p 6333:6333 -p 6334:6334 --name qdrant qdrant/qdrant
+```
+
+The Qdrant server will be available at:
+
+```text
+http://localhost:6333
+```
+
+To verify that the container is running:
+
+```bash
+docker ps
+```
+
+To stop Qdrant:
+
+```bash
+docker stop qdrant
+```
+
+To start it again:
+
+```bash
+docker start qdrant
+```
+
+---
+
+## Gemini API Configuration
+
+Create a `.env` file in the project root:
+
+```text
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Do not commit your `.env` file to GitHub.
+
+Add the following to `.gitignore`:
+
+```text
+.env
+```
+
+---
+
+## Running the Application
+
+Start the Flask application:
+>>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 ```bash
 python app.py
 ```
+
 
 Open your browser: **http://localhost:5000**
 
@@ -1357,6 +1798,171 @@ curl -X POST http://localhost:5000/ask \
     }
   ]
 }
+=======
+The application will run at:
+
+```text
+http://127.0.0.1:5000
+```
+
+Open the address in your browser.
+
+---
+
+## Using the Application
+
+### Step 1: Upload a Document
+
+Upload a supported document:
+
+```text
+TXT
+PDF
+DOCX
+```
+
+The system will:
+
+```text
+Upload
+   ↓
+Load Document
+   ↓
+Split Document
+   ↓
+Generate Embeddings
+   ↓
+Store Embeddings in Qdrant
+```
+
+---
+
+### Step 2: Enter a Query
+
+Enter a natural-language question.
+
+Example:
+
+```text
+What are the basic requirements for weather trend forecasting?
+```
+
+---
+
+### Step 3: Perform Semantic Search
+
+The system will:
+
+```text
+Query
+   ↓
+Generate Query Embedding
+   ↓
+Search Qdrant
+   ↓
+Retrieve Top-K Chunks
+```
+
+---
+
+### Step 4: Generate AI Answer
+
+The retrieved chunks are provided to Gemini.
+
+The model generates an answer based on the retrieved document context.
+
+The interface displays:
+
+```text
+AI Answer
+```
+
+and:
+
+```text
+Search Results
+```
+
+with similarity scores.
+
+---
+
+## Example
+
+### Document
+
+A document contains:
+
+```text
+Basic Assessment
+
+Data Cleaning & Preprocessing
+Handle missing values, outliers, and normalize data.
+
+Exploratory Data Analysis
+Perform basic EDA to uncover trends, correlations, and patterns.
+
+Model Building
+Build a basic forecasting model and evaluate its performance.
+```
+
+### Query
+
+```text
+What are the requirements for the basic weather forecasting assessment?
+```
+
+### Semantic Search
+
+The system retrieves relevant passages even if the query does not exactly match the document wording.
+
+### AI Answer
+
+The LLM generates an answer based on the retrieved context.
+
+---
+
+## RAG Pipeline
+
+The complete Retrieval-Augmented Generation pipeline is:
+
+```text
+             DOCUMENT INGESTION
+                     │
+                     ▼
+              Load Documents
+                     │
+                     ▼
+               Split Documents
+                     │
+                     ▼
+             Generate Embeddings
+                     │
+                     ▼
+              Store in Qdrant
+                     │
+                     │
+                     │
+             USER QUERY
+                     │
+                     ▼
+             Embed User Query
+                     │
+                     ▼
+            Vector Similarity Search
+                     │
+                     ▼
+              Retrieve Top-K
+                     │
+                     ▼
+             Retrieved Context
+                     │
+                     ▼
+                 Gemini
+                     │
+                     ▼
+             Generated Answer
+>>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 ```
 
 ---
@@ -1448,6 +2054,57 @@ MIT License — feel free to use, modify, and distribute.
 - Flask Web Framework
 
 ---
+=======
+## Limitations
+
+* The current system primarily supports unstructured text documents.
+* CSV files are not currently included in the main document ingestion workflow.
+* Retrieval quality depends on the selected embedding model.
+* Very large documents may require optimized chunking strategies.
+* Semantic similarity does not guarantee exact structured filtering.
+* The system depends on the quality and relevance of retrieved chunks.
+* The LLM is restricted to the retrieved context to reduce hallucinations.
+
+---
+
+## Future Improvements
+
+Potential improvements include:
+
+* Support for additional document formats.
+* Improved document-specific chunking strategies.
+* Metadata filtering.
+* Hybrid keyword + semantic search.
+* Reranking retrieved documents.
+* Improved embedding models.
+* Persistent document and collection management.
+* Multi-document search.
+* Document deletion and replacement.
+* Query history.
+* Streaming LLM responses.
+* Authentication and user management.
+* Production deployment.
+* Evaluation using retrieval metrics such as Precision@K, Recall@K, and MRR.
+
+---
+
+## Key Concepts Demonstrated
+
+This project demonstrates practical implementation of:
+
+* Natural Language Processing
+* Semantic Search
+* Text Embeddings
+* Vector Databases
+* Nearest-Neighbor Search
+* Document Chunking
+* Retrieval-Augmented Generation (RAG)
+* Large Language Models
+* Flask Web Applications
+
+---
+
+>>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 # Code Quality
 

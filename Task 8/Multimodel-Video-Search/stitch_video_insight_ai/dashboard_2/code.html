@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cognitive Logic - Multimodal Video Understanding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-container-low": "#f2f3ff",
+                    "on-surface-variant": "#434655",
+                    "surface-container": "#eaedff",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#faf8ff",
+                    "tertiary-container": "#bc4800",
+                    "surface": "#faf8ff",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "inverse-surface": "#283044",
+                    "on-background": "#131b2e",
+                    "surface-dim": "#d2d9f4",
+                    "surface-variant": "#dae2fd",
+                    "inverse-on-surface": "#eef0ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#360f00",
+                    "secondary-fixed": "#eaddff",
+                    "on-secondary-fixed-variant": "#5a00c6",
+                    "tertiary": "#943700",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#eeefff",
+                    "on-tertiary-container": "#ffede6",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdbcd",
+                    "background": "#faf8ff",
+                    "primary-fixed": "#dbe1ff",
+                    "secondary-fixed-dim": "#d2bbff",
+                    "on-secondary-fixed": "#25005a",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "surface-container-highest": "#dae2fd",
+                    "outline": "#737686",
+                    "secondary-container": "#8a4cfc",
+                    "outline-variant": "#c3c6d7",
+                    "on-primary-fixed": "#00174b",
+                    "on-error": "#ffffff",
+                    "secondary": "#712ae2",
+                    "on-surface": "#131b2e",
+                    "primary": "#004ac6",
+                    "surface-tint": "#0053db",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#fffbff",
+                    "inverse-primary": "#b4c5ff",
+                    "primary-container": "#2563eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "md": "16px",
+                    "sm": "8px",
+                    "3xl": "64px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "2xl": "48px",
+                    "container-max": "1280px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "label-upper": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono-code": ["jetbrainsMono"],
+                    "body-base": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-upper": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400"}],
+                    "mono-code": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                    "body-base": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .upload-dashed {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23004ac6' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base antialiased min-h-screen flex">
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-screen w-64 bg-surface-container-low border-r border-outline-variant/20 flex flex-col py-lg z-40 hidden md:flex">
+<div class="px-lg mb-xl flex items-center gap-md">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">psychology</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary leading-none">Cognitive Logic</h1>
+<p class="font-label-upper text-[10px] text-on-surface-variant tracking-widest mt-1 uppercase">Video Intelligence</p>
+</div>
+</div>
+<nav class="flex-grow">
+<div class="flex items-center gap-md p-md mb-xs mx-sm cursor-pointer bg-secondary-container text-on-secondary-container rounded-lg font-bold transition-all">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-upper text-label-upper">Dashboard</span>
+</div>
+<div class="flex items-center gap-md p-md mb-xs mx-sm cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">upload_file</span>
+<span class="font-label-upper text-label-upper">Upload Video</span>
+</div>
+<div class="flex items-center gap-md p-md mb-xs mx-sm cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-upper text-label-upper">Results</span>
+</div>
+<div class="flex items-center gap-md p-md mb-xs mx-sm cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">manage_search</span>
+<span class="font-label-upper text-label-upper">Semantic Search</span>
+</div>
+<div class="mt-auto">
+<div class="flex items-center gap-md p-md mb-xs mx-sm cursor-pointer text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-upper text-label-upper">Settings</span>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-grow md:ml-64 flex flex-col min-h-screen">
+<!-- Top App Bar Shell -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-lg z-30 shadow-sm">
+<h2 class="font-headline-md text-headline-md text-primary hidden md:block">Dashboard</h2>
+<div class="flex items-center gap-lg ml-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors cursor-pointer active:scale-95">
+<span class="material-symbols-outlined text-primary">dark_mode</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center cursor-pointer active:scale-95 transition-transform">
+<img class="w-full h-full rounded-full object-cover border-2 border-primary/20" data-alt="A professional headshot of a diverse tech executive in a minimalist studio setting. The lighting is soft and high-key, emphasizing a clean and intelligent professional persona. The overall aesthetic is modern, sleek, and high-contrast light mode." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwrEbllODftD47-uah3y1gldcsPBJFYeY50t4NkEjkk1W-fcoU093lZSL4JWnm24ep6z5-_Pumv7lBK8Jh-r74eRnzLLJIRJVJzQ78VCiwpWvG3pX2aJFIMr9Ku-VQVpAvNe6do0YiDy0rt3bmIoacrB7y5_sbuU2kRt3VvsBism08CLl5VXs2lfhWQSEZwu1Z95CggxyKDosNusRzBhsCwCPoBeuJynR65hq3p_U6ESRSJsEyOhBgBA"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="mt-16 p-lg md:p-2xl max-w-6xl mx-auto w-full flex-grow flex flex-col gap-xl">
+<!-- Hero Section -->
+<section class="text-center md:text-left space-y-md animate-fade-in">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-background tracking-tight">
+                    Multimodal Video Understanding <br class="hidden md:block"/>
+<span class="text-primary">&amp; Semantic Search</span>
+</h1>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-3xl">
+                    Upload a video to automatically generate transcripts, summaries, chapters, and perform semantic search. Our AI-driven engine extracts deep cognitive insights from every frame and phoneme.
+                </p>
+</section>
+<!-- Main Interactive Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Upload Zone Card (Large) -->
+<div class="lg:col-span-2 space-y-lg">
+<div class="glass-panel rounded-2xl p-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="upload-dashed rounded-2xl h-80 flex flex-col items-center justify-center gap-md cursor-pointer hover:bg-primary/5 transition-colors group relative overflow-hidden" id="drop-zone">
+<!-- Background Subtle Animation -->
+
+<div class="w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">cloud_upload</span>
+</div>
+<div class="text-center z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface">Drag and drop video files</h3>
+<p class="font-body-base text-on-surface-variant mt-2">or click to browse from your device</p>
+</div>
+<div class="flex flex-wrap justify-center gap-sm mt-4 z-10">
+<span class="px-md py-xs bg-surface-container rounded-full text-primary font-label-upper text-[11px] border border-primary/10">MP4</span>
+<span class="px-md py-xs bg-surface-container rounded-full text-primary font-label-upper text-[11px] border border-primary/10">AVI</span>
+<span class="px-md py-xs bg-surface-container rounded-full text-primary font-label-upper text-[11px] border border-primary/10">MOV</span>
+<span class="px-md py-xs bg-surface-container rounded-full text-primary font-label-upper text-[11px] border border-primary/10">MKV</span>
+</div>
+<button class="mt-lg px-xl py-md bg-primary text-on-primary rounded-lg font-bold active:scale-95 transition-transform shadow-lg shadow-primary/20 hover:bg-primary/90">
+                                Upload Button
+                            </button>
+</div>
+</div>
+<!-- Selected File State (Hidden/Interactive mockup) -->
+<div class="glass-panel rounded-2xl p-lg border-primary/20 bg-primary-container/5 animate-slide-up" id="selected-file-panel">
+<div class="flex items-center gap-lg">
+<div class="w-24 h-16 rounded-lg bg-inverse-surface overflow-hidden relative flex-shrink-0">
+<img class="w-full h-full object-cover opacity-80" data-alt="A cinematic thumbnail of a tech tutorial video. The frame shows a clean workspace with a high-end laptop and a blurred, professional home-office background. Lighting is focused and warm, creating an inviting educational mood in a premium minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh18miKnW8hQwCpYJtaVURV4UYtkBn0oW8zmPEllYvsU5BWuerLr-Fo0-4k8-gjvcXGoxrS5G4wwArSMSrHJpwAQIcoW3btVbpZ79lnVd4uJqdLhF0kb9K3cN_qPRzgBCsvOQX3qb7SpOC13blbyzSZrmN2UK023Z42-bbH0769LqZHy1LHgWbPoKgpVngT8861DCu_3pCbz5fQQ_9c6elmnnttWYEpI9i7TI7QH0yRsjxht-JbGBSAw"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-xl" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-md text-body-base font-bold text-on-surface">tutorial_video.mp4</h4>
+<div class="flex gap-md mt-1">
+<span class="font-label-upper text-[12px] text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">schedule</span> 12:45
+                                    </span>
+<span class="font-label-upper text-[12px] text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">database</span> 45.2 MB
+                                    </span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-error hover:bg-error-container transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<div class="mt-lg pt-lg border-t border-outline-variant/20">
+<button class="w-full py-md bg-secondary text-on-secondary rounded-lg font-bold flex items-center justify-center gap-md active:scale-[0.98] transition-all ai-glow">
+<span class="material-symbols-outlined">auto_awesome</span>
+                                Process Video
+                            </button>
+</div>
+</div>
+</div>
+<!-- Info/Stats Sidebar Bento -->
+<div class="flex flex-col gap-lg">
+<!-- Quick Stats Card -->
+<div class="glass-panel rounded-2xl p-lg flex flex-col gap-md">
+<h4 class="font-label-upper text-label-upper text-primary">System Capacity</h4>
+<div class="flex items-end gap-sm">
+<span class="text-3xl font-bold text-on-background">84%</span>
+<span class="font-body-sm text-on-surface-variant mb-1">Available GPU</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%] rounded-full"></div>
+</div>
+</div>
+<!-- Capability Preview Cards -->
+<div class="glass-panel rounded-2xl p-lg bg-gradient-to-br from-surface to-secondary-container/10">
+<h4 class="font-label-upper text-label-upper text-secondary">AI Pipeline</h4>
+<ul class="mt-md space-y-md">
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">mic_external_on</span>
+<div>
+<p class="font-body-base font-bold text-on-surface text-sm">Whisper Large v3</p>
+<p class="font-body-sm text-on-surface-variant">Automated transcription with 99% accuracy.</p>
+</div>
+</li>
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<div>
+<p class="font-body-base font-bold text-on-surface text-sm">OpenCV Analysis</p>
+<p class="font-body-sm text-on-surface-variant">Frame-by-frame scene and object detection.</p>
+</div>
+</li>
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">search_insights</span>
+<div>
+<p class="font-body-base font-bold text-on-surface text-sm">Qdrant Vector DB</p>
+<p class="font-body-sm text-on-surface-variant">Lightning fast semantic video search.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Recent Activity Placeholder -->
+<div class="glass-panel rounded-2xl p-lg flex-grow">
+<div class="flex justify-between items-center mb-md">
+<h4 class="font-label-upper text-label-upper text-on-surface-variant">Recent Jobs</h4>
+<span class="material-symbols-outlined text-outline text-sm">more_horiz</span>
+</div>
+<div class="space-y-md">
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="font-body-sm text-on-surface">product_demo_v2.mp4</span>
+<span class="font-label-upper text-[10px] text-outline ml-auto">2m ago</span>
+</div>
+<div class="flex items-center gap-sm opacity-50">
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+<span class="font-body-sm text-on-surface">interview_raw.mov</span>
+<span class="font-label-upper text-[10px] text-outline ml-auto">1h ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full py-xl border-t border-outline-variant/10 bg-surface flex flex-col md:flex-row justify-between items-center px-2xl mt-auto">
+<div class="font-label-upper text-label-upper opacity-50 text-on-surface-variant mb-md md:mb-0">
+                © 2024 Cognitive Logic. Powered by Whisper, OpenCV, and Qdrant.
+            </div>
+<div class="flex gap-md">
+<a class="inline-block mx-md text-outline font-body-sm text-body-sm hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="inline-block mx-md text-outline font-body-sm text-body-sm hover:text-primary transition-colors" href="#">API</a>
+<a class="inline-block mx-md text-outline font-body-sm text-body-sm hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</footer>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple drag & drop visual feedback
+        const dropZone = document.getElementById('drop-zone');
+        const selectedPanel = document.getElementById('selected-file-panel');
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('bg-primary/10');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-primary/10');
+            }, false);
+        });
+
+        // Toggle selected panel view on click mockup
+        dropZone.addEventListener('click', () => {
+            selectedPanel.classList.toggle('hidden');
+        });
+
+        // Initialize state
+        // selectedPanel.classList.add('hidden'); // Uncomment to start with hidden panel
+    </script>
+</body></html>

@@ -1,0 +1,2 @@
+Hy there this text file is for testing the text loader function.
+Thank you

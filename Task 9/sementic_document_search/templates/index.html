@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Semantic Document Search
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+
+            color: #1f2937;
+
+            min-height: 100vh;
+
+        }
+
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1000px;
+
+            margin: 0 auto;
+
+            padding: 40px 0;
+
+        }
+
+
+        /* =========================
+           Header
+        ========================= */
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 40px;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 36px;
+
+            margin-bottom: 10px;
+
+            color: #111827;
+
+        }
+
+
+        .header p {
+
+            font-size: 16px;
+
+            color: #6b7280;
+
+        }
+
+
+        /* =========================
+           Card
+        ========================= */
+
+        .card {
+
+            background: #ffffff;
+
+            border-radius: 14px;
+
+            padding: 28px;
+
+            margin-bottom: 25px;
+
+            border:
+                1px solid
+                #e5e7eb;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
+
+        }
+
+
+        .card h2 {
+
+            font-size: 22px;
+
+            margin-bottom: 20px;
+
+            color: #111827;
+
+        }
+
+
+        /* =========================
+           Upload Section
+        ========================= */
+
+        .upload-area {
+
+            border:
+                2px dashed
+                #d1d5db;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.2s;
+
+        }
+
+
+        .upload-area:hover {
+
+            border-color:
+                #2563eb;
+
+        }
+
+
+        .upload-area input {
+
+            margin-top: 15px;
+
+        }
+
+
+        .upload-button {
+
+            margin-top: 20px;
+
+            padding:
+                12px
+                24px;
+
+            background:
+                #2563eb;
+
+            color:
+                #ffffff;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .upload-button:hover {
+
+            background:
+                #1d4ed8;
+
+        }
+
+
+        /* =========================
+           Upload Status
+        ========================= */
+
+        #uploadStatus {
+
+            margin-top: 20px;
+
+            padding: 14px;
+
+            border-radius: 8px;
+
+            display: none;
+
+            background:
+                #eff6ff;
+
+            color:
+                #1d4ed8;
+
+        }
+
+
+        /* =========================
+           Search
+        ========================= */
+
+        .search-container {
+
+            display: flex;
+
+            gap: 12px;
+
+        }
+
+
+        #query {
+
+            flex: 1;
+
+            padding:
+                14px
+                16px;
+
+            border:
+                1px solid
+                #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            outline: none;
+
+        }
+
+
+        #query:focus {
+
+            border-color:
+                #2563eb;
+
+        }
+
+
+        .search-button {
+
+            padding:
+                14px
+                24px;
+
+            background:
+                #111827;
+
+            color:
+                #ffffff;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+        }
+
+
+        .search-button:hover {
+
+            background:
+                #374151;
+
+        }
+
+
+        /* =========================
+           AI Answer
+        ========================= */
+
+        #answerSection {
+
+            display: none;
+
+            margin-top: 30px;
+
+        }
+
+
+        .answer-box {
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid
+                #e5e7eb;
+
+            border-radius:
+                12px;
+
+            padding:
+                24px;
+
+            line-height:
+                1.7;
+
+            color:
+                #374151;
+
+            box-shadow:
+                0 4px 15px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.04
+                );
+
+        }
+
+
+        .answer-label {
+
+            font-size:
+                14px;
+
+            font-weight:
+                bold;
+
+            color:
+                #2563eb;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        /* =========================
+           Search Results
+        ========================= */
+
+        #resultsSection {
+
+            display: none;
+
+            margin-top: 30px;
+
+        }
+
+
+        .results-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                20px;
+
+        }
+
+
+        .result-count {
+
+            font-size:
+                14px;
+
+            color:
+                #6b7280;
+
+        }
+
+
+        .result-card {
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid
+                #e5e7eb;
+
+            border-radius:
+                12px;
+
+            padding:
+                22px;
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .result-top {
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-bottom:
+                15px;
+
+        }
+
+
+        .rank {
+
+            font-weight:
+                bold;
+
+            color:
+                #111827;
+
+        }
+
+
+        .score {
+
+            background:
+                #eff6ff;
+
+            color:
+                #2563eb;
+
+            padding:
+                5px
+                10px;
+
+            border-radius:
+                6px;
+
+            font-size:
+                13px;
+
+        }
+
+
+        .source {
+
+            font-size:
+                13px;
+
+            color:
+                #6b7280;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .result-content {
+
+            line-height:
+                1.7;
+
+            color:
+                #374151;
+
+        }
+
+
+        /* =========================
+           Loading
+        ========================= */
+
+        .loading {
+
+            display:
+                none;
+
+            text-align:
+                center;
+
+            padding:
+                20px;
+
+            color:
+                #6b7280;
+
+        }
+
+
+        /* =========================
+           Error
+        ========================= */
+
+        .error {
+
+            display:
+                none;
+
+            margin-top:
+                15px;
+
+            padding:
+                14px;
+
+            border-radius:
+                8px;
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+        }
+
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (
+            max-width: 700px
+        ) {
+
+            .container {
+
+                width:
+                    95%;
+
+                padding:
+                    20px
+                    0;
+
+            }
+
+
+            .header h1 {
+
+                font-size:
+                    28px;
+
+            }
+
+
+            .search-container {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .search-button {
+
+                width:
+                    100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         Header
+    ========================= -->
+
+    <header class="header">
+
+        <h1>
+            Semantic Document Search
+        </h1>
+
+        <p>
+            Search your documents using
+            semantic meaning and AI-generated answers.
+        </p>
+
+    </header>
+
+
+
+    <!-- =========================
+         Upload Document
+    ========================= -->
+
+    <section class="card">
+
+        <h2>
+            Upload Document
+        </h2>
+
+
+        <div class="upload-area">
+
+            <p>
+                Select a document to index
+                for semantic search.
+            </p>
+
+
+            <input
+                type="file"
+                id="fileInput"
+                accept=".txt,.pdf,.docx,.csv"
+            >
+
+
+            <br>
+
+
+            <button
+                class="upload-button"
+                id="uploadButton"
+            >
+                Upload & Index
+            </button>
+
+        </div>
+
+
+        <div
+            id="uploadStatus"
+        >
+        </div>
+
+
+        <div
+            id="uploadError"
+            class="error"
+        >
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         Search
+    ========================= -->
+
+    <section class="card">
+
+        <h2>
+            Semantic Search
+        </h2>
+
+
+        <div class="search-container">
+
+            <input
+                type="text"
+                id="query"
+                placeholder="Ask a question about your document..."
+            >
+
+
+            <button
+                class="search-button"
+                id="searchButton"
+            >
+                Search
+            </button>
+
+        </div>
+
+
+        <div
+            id="searchLoading"
+            class="loading"
+        >
+            Searching documents and generating AI answer...
+        </div>
+
+
+        <div
+            id="searchError"
+            class="error"
+        >
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AI Answer
+    ========================= -->
+
+    <section
+        id="answerSection"
+    >
+
+        <div class="card">
+
+            <h2>
+                AI Answer
+            </h2>
+
+
+            <div
+                class="answer-box"
+                id="answer"
+            >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         Search Results
+    ========================= -->
+
+    <section
+        id="resultsSection"
+    >
+
+        <div class="card">
+
+            <div
+                class="results-header"
+            >
+
+                <h2>
+                    Search Results
+                </h2>
+
+
+                <span
+                    class="result-count"
+                    id="resultCount"
+                >
+                    0 results
+                </span>
+
+            </div>
+
+
+            <div
+                id="resultsContainer"
+            >
+            </div>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+
+<script>
+
+
+    // =================================
+    // Elements
+    // =================================
+
+    const fileInput =
+        document.getElementById(
+            "fileInput"
+        );
+
+
+    const uploadButton =
+        document.getElementById(
+            "uploadButton"
+        );
+
+
+    const uploadStatus =
+        document.getElementById(
+            "uploadStatus"
+        );
+
+
+    const uploadError =
+        document.getElementById(
+            "uploadError"
+        );
+
+
+    const queryInput =
+        document.getElementById(
+            "query"
+        );
+
+
+    const searchButton =
+        document.getElementById(
+            "searchButton"
+        );
+
+
+    const searchLoading =
+        document.getElementById(
+            "searchLoading"
+        );
+
+
+    const searchError =
+        document.getElementById(
+            "searchError"
+        );
+
+
+    const answerSection =
+        document.getElementById(
+            "answerSection"
+        );
+
+
+    const answer =
+        document.getElementById(
+            "answer"
+        );
+
+
+    const resultsSection =
+        document.getElementById(
+            "resultsSection"
+        );
+
+
+    const resultsContainer =
+        document.getElementById(
+            "resultsContainer"
+        );
+
+
+    const resultCount =
+        document.getElementById(
+            "resultCount"
+        );
+
+
+
+    // =================================
+    // Upload Document
+    // =================================
+
+    uploadButton.addEventListener(
+        "click",
+        async function () {
+
+            uploadStatus.style.display =
+                "none";
+
+            uploadError.style.display =
+                "none";
+
+
+            const file =
+                fileInput.files[0];
+
+
+            if (!file) {
+
+                uploadError.textContent =
+                    "Please select a document first.";
+
+                uploadError.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "file",
+                file
+            );
+
+
+            uploadButton.disabled =
+                true;
+
+
+            uploadButton.textContent =
+                "Uploading...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/upload",
+                        {
+
+                            method:
+                                "POST",
+
+                            body:
+                                formData
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.error ||
+                        "Upload failed."
+
+                    );
+
+                }
+
+
+                uploadStatus.textContent =
+
+                    data.message ||
+
+                    "Document uploaded successfully.";
+
+
+                uploadStatus.style.display =
+                    "block";
+
+
+            }
+
+            catch (error) {
+
+                uploadError.textContent =
+                    error.message;
+
+
+                uploadError.style.display =
+                    "block";
+
+            }
+
+            finally {
+
+                uploadButton.disabled =
+                    false;
+
+
+                uploadButton.textContent =
+                    "Upload & Index";
+
+            }
+
+        }
+    );
+
+
+
+    // =================================
+    // Semantic Search
+    // =================================
+
+    async function performSearch() {
+
+
+        searchError.style.display =
+            "none";
+
+
+        answerSection.style.display =
+            "none";
+
+
+        resultsSection.style.display =
+            "none";
+
+
+        const query =
+            queryInput.value.trim();
+
+
+        if (!query) {
+
+            searchError.textContent =
+                "Please enter a search query.";
+
+            searchError.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        searchButton.disabled =
+            true;
+
+
+        searchButton.textContent =
+            "Searching...";
+
+
+        searchLoading.style.display =
+            "block";
+
+
+        try {
+
+
+            const response =
+                await fetch(
+                    "/search",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                query:
+                                    query
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+
+                    data.error ||
+
+                    "Search failed."
+
+                );
+
+            }
+
+
+
+            // =========================
+            // Display AI Answer
+            // =========================
+
+            answer.textContent =
+                data.answer ||
+                "No answer was generated.";
+
+
+            answerSection.style.display =
+                "block";
+
+
+
+            // =========================
+            // Display Results
+            // =========================
+
+            resultsContainer.innerHTML =
+                "";
+
+
+            const results =
+                data.results || [];
+
+
+            resultCount.textContent =
+
+                `${results.length} result${
+
+                    results.length !== 1
+
+                        ? "s"
+
+                        : ""
+
+                }`;
+
+
+
+            results.forEach(
+                function (
+                    result,
+                    index
+                ) {
+
+
+                    const resultCard =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    resultCard.className =
+                        "result-card";
+
+
+                    const score =
+
+                        Number(
+                            result.score
+                        );
+
+
+
+                    resultCard.innerHTML = `
+
+                        <div
+                            class="result-top"
+                        >
+
+                            <span
+                                class="rank"
+                            >
+
+                                Result #${
+                                    index + 1
+                                }
+
+                            </span>
+
+
+                            <span
+                                class="score"
+                            >
+
+                                Similarity:
+                                ${
+                                    score.toFixed(
+                                        4
+                                    )
+                                }
+
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="source"
+                        >
+
+                            Source:
+                            ${
+                                result.source ||
+                                "Unknown"
+                            }
+
+                        </div>
+
+
+                        <p
+                            class="result-content"
+                        >
+
+                            ${
+                                result.content ||
+                                ""
+                            }
+
+                        </p>
+
+                    `;
+
+
+                    resultsContainer.appendChild(
+                        resultCard
+                    );
+
+                }
+            );
+
+
+            resultsSection.style.display =
+                "block";
+
+
+        }
+
+        catch (error) {
+
+            searchError.textContent =
+                error.message;
+
+
+            searchError.style.display =
+                "block";
+
+        }
+
+        finally {
+
+            searchButton.disabled =
+                false;
+
+
+            searchButton.textContent =
+                "Search";
+
+
+            searchLoading.style.display =
+                "none";
+
+        }
+
+    }
+
+
+
+    // =================================
+    // Search Button
+    // =================================
+
+    searchButton.addEventListener(
+        "click",
+        performSearch
+    );
+
+
+
+    // =================================
+    // Enter Key Search
+    // =================================
+
+    queryInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                event.preventDefault();
+
+                performSearch();
+
+            }
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>
