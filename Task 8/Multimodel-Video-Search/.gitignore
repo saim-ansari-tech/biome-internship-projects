@@ -66,3 +66,7 @@ uploads/
 .env
 ../.vscode/
 /Multimodel-Video-Search.zip
+
+Add-Content .gitignore ".env"
+Add-Content .gitignore "**/.env"
+Add-Content .gitignore ".vscode/"
