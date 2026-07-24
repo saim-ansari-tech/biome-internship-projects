@@ -1102,26 +1102,8 @@ Evaluation metrics include:
 - Confusion Matrix
 
 
-## Task 9 - Sementic Document Search
-# Semantic Document Search System
 
-A semantic document search system that retrieves relevant document passages based on **meaning rather than exact keyword matching**.
 
-Traditional keyword search can fail when users use different words to describe the same concept. For example, a user searching for:
-
-> "How do I reset my password?"
-
-may not find a document containing:
-
-> "Account credential recovery steps"
-
-even though the document is highly relevant.
-
-This project solves this problem using **semantic embeddings** and **vector similarity search**. Documents are loaded, split into meaningful chunks, converted into vector embeddings, stored in a Qdrant vector database, and retrieved using natural-language queries.
-
-An optional Gemini-powered RAG component generates a concise answer based only on the retrieved document context.
-
----
 
 
 ## Task 8 - Multimodel Video Search AI
@@ -1148,6 +1130,73 @@ An optional Gemini-powered RAG component generates a concise answer based only o
 
 ---
 
+
+## Architecture
+
+```
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│   User Upload   │────▶│  Flask Backend   │────▶│  Async Pipeline │
+│   (Dashboard)   │     │  (app.py)        │     │  (Threading)    │
+└─────────────────┘     └──────────────────┘     └─────────────────┘
+                              │                            │
+                              ▼                            ▼
+                        ┌──────────┐              ┌─────────────────┐
+                        │  Qdrant  │◀─────────────│  ML Pipeline    │
+                        │  Vector  │   Embeddings │  (12 Steps)     │
+                        │  Store   │              │                 │
+                        └──────────┘              │ 1. Scene Detect │
+                              │                   │ 2. Keyframes    │
+                              ▼                   │ 3. Audio Extract│
+                        ┌──────────┐              │ 4. Whisper      │
+                        │  Groq    │◀─────────────│ 5. VLM Scenes   │
+                        │  LLM     │   Context    │ 6. Summary      │
+                        │  (QA)    │              │ 7. Chapters     │
+                        └──────────┘              │ 8. Chunking     │
+                                                  │ 9. Embeddings   │
+                                                  │ 10. Qdrant Store│
+                                                  └─────────────────┘
+```
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `ModuleNotFoundError: No module named 'src'` | Create `src/__init__.py` (empty file) |
+| `File already exists in output path` | Delete `data/audio.wav` and restart |
+| `CUDA out of memory` | Reduce batch size or use CPU: edit `transcription_audio.py` device to `"cpu"` |
+| `Qdrant connection refused` | Start Qdrant with Docker, or app auto-falls back to in-memory |
+| `GROQ_API_KEY not found` | Add key to `.env` file |
+| Processing stuck at 5% | Check terminal logs for ML model errors |
+| "Sorry I cannot find this information" | Lower similarity threshold in `app.py` or rephrase query |
+
+---
+
+## Performance Notes
+
+| Component | GPU Time | CPU Time | VRAM |
+|-----------|----------|----------|------|
+| Whisper Small | ~30s | ~2min | ~2GB |
+| SmolVLM2-2.2B | ~1-2min | ~5min | ~5GB |
+| Scene Detection | ~10s | ~10s | Minimal |
+| Embeddings | ~5s | ~5s | Minimal |
+| **Total (5min video)** | **~3-5min** | **~10-15min** | **~7GB** |
+
+
+
+## Future Enhancements
+
+- [ ] Multi-video batch processing
+- [ ] Real-time video streaming analysis
+- [ ] Export results as PDF/Word reports
+- [ ] User authentication & video history
+- [ ] Support for more languages (multilingual Whisper)
+- [ ] Fine-tuned VLM for specific domains
+- [ ] WebSocket-based live progress instead of polling
+
+
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -1161,7 +1210,259 @@ An optional Gemini-powered RAG component generates a concise answer based only o
 | **Vector Database** | Qdrant |
 | **LLM** | Groq API (Llama 3.1 8B Instant) |
 | **Audio Extraction** | FFmpeg (via audio_extract) |
+
+
+## Project Structure
+
+```
+VideoMind-AI/
+├── app.py                          # Flask application (routes, API)
+├── .env                            # Environment variables (GROQ_API_KEY)
+│
+├── src/                            # Core ML pipeline modules
+│   ├── __init__.py
+│   ├── pipeline.py                 # Main processing orchestrator
+│   ├── scenes_detector.py          # Scene boundary detection
+│   ├── frames_extractor.py         # Keyframe extraction (OpenCV)
+│   ├── audio_extractor.py          # Audio extraction (FFmpeg)
+│   ├── transcription_audio.py      # Whisper transcription
+│   ├── scene_description.py        # VLM scene descriptions
+│   ├── summary_generator.py        # Summary & chapter generation
+│   ├── text_chunker.py             # Transcript chunking
+│   ├── embedding_generator.py      # Sentence transformer embeddings
+│   ├── vector_store.py             # Qdrant vector database
+│   ├── video_store.py              # JSON result persistence
+│   ├── question_answering.py       # LLM-based QA
+│   └── llm_generator.py            # Groq API client
+│
+├── templates/                      # Flask HTML templates
+│   ├── index.html                  # Dashboard (upload + video list)
+│   ├── processing.html             # Real-time processing status
+│   ├── results.html                # Video analysis results
+│   └── search.html                 # Semantic search interface
+│
+├── static/
+│   ├── css/                        # Page stylesheets
+│   │   ├── dashboard.css
+│   │   ├── processing.css
+│   │   ├── results.css
+│   │   └── search.css
+│   └── js/                         # Frontend logic
+│       ├── dashboard.js            # Upload + video listing
+│       ├── processing.js           # Progress polling
+│       ├── results.js              # Results display
+│       └── search.js               # Semantic search
+│
+└── data/                           # Generated data (auto-created)
+    ├── uploads/                    # Uploaded videos
+    ├── audio/                      # Extracted audio files
+    ├── keyframes/                  # Scene keyframes
+    └── videos/                     # JSON analysis results
+
+
+## Usage Guide
+
+### Upload a Video
+
+1. Go to the **Dashboard** (`/`)
+2. Drag & drop or click **Browse Files** to select a video
+3. Click **Process Video**
+4. You will be redirected to the **Processing** page with live progress
+
+### Monitor Processing
+
+- Watch real-time pipeline progress (12 steps)
+- See live logs, elapsed time, and metadata updates
+- Processing typically takes 2-5 minutes for a 5-minute video
+
+### View Results
+
+- **Video Player** — Play your uploaded video
+- **Summary** — AI-generated video summary
+- **Chapters** — Clickable timestamped chapter markers
+- **Transcript** — Full timestamped transcript with search
+- **Detected Scenes** — Visual scene descriptions with timestamps
+- **Metadata** — Technical details (resolution, codec, models used)
+
+### Semantic Search
+
+1. Go to **Semantic Search** (`/search`)
+2. Select a processed video from the dropdown
+3. Type a natural language query, e.g.:
+   - *"What is this video about?"*
+   - *"When does the speaker mention AI?"*
+   - *"Explain the part about transformers"*
+4. Results show ranked matches with timestamps and confidence scores
+
+---
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Dashboard page |
+| `/processing` | GET | Processing status page |
+| `/results` | GET | Results display page |
+| `/search` | GET | Semantic search page |
+| `/upload` | POST | Upload video, start async processing |
+| `/status/<video_id>` | GET | Poll processing progress |
+| `/video/<video_id>` | GET | Get full analysis results (JSON) |
+| `/video_file/<video_id>` | GET | Stream original video file |
+| `/ask` | POST | Semantic search / question answering |
+| `/videos` | GET | List all processed videos |
+
+### Example: Upload Video
+
+```bash
+curl -X POST -F "video=@myvideo.mp4" http://localhost:5000/upload
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "message": "Video uploaded. Processing started in background.",
+  "status": "processing"
+}
+```
+
+### Example: Ask a Question
+
+```bash
+curl -X POST http://localhost:5000/ask \
+  -H "Content-Type: application/json" \
+  -d '{
+    "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "question": "What is this video about?",
+    "top_k": 5
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "question": "What is this video about?",
+  "answer": "The video discusses the importance of business model feasibility analysis...",
+  "sources": [
+    {
+      "start_time": 0.0,
+      "end_time": 26.86,
+      "text": "The speaker stresses the need for thorough business model feasibility analysis...",
+      "score": 0.85
+    }
+  ]
+}
 =======
+The application will run at:
+
+```text
+http://127.0.0.1:5000
+```
+
+Open the address in your browser.
+
+
+## Prerequisites
+
+- **Python 3.10+**
+- **CUDA-capable GPU** (recommended) or CPU fallback
+- **Qdrant** running locally (or use in-memory fallback)
+- **FFmpeg** installed and in PATH
+- **Groq API Key** (free tier available)
+
+---
+
+## Installation
+
+### 1. Clone & Setup Environment
+
+```bash
+git clone <your-repo-url>
+cd VideoMind-AI
+
+# Create virtual environment
+python -m venv venv
+
+# Activate (Windows)
+venv\Scripts\activate
+
+# Activate (Linux/Mac)
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+
+```bash
+pip install flask flask-cors
+pip install faster-whisper transformers torch accelerate
+pip install sentence-transformers qdrant-client
+pip install scenedetect opencv-python-headless
+pip install audio-extract python-dotenv
+pip install groq
+```
+
+### 3. Configure Environment
+
+Create a `.env` file in the project root:
+
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+Get your free API key at: [https://console.groq.com](https://console.groq.com)
+
+### 4. Start Qdrant (Optional)
+
+```bash
+# Using Docker
+docker run -p 6333:6333 qdrant/qdrant
+
+# Or use in-memory fallback (data lost on restart)
+# No action needed — the app falls back automatically
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Task 9 - Sementic Document Search
+# Semantic Document Search System
+
+A semantic document search system that retrieves relevant document passages based on **meaning rather than exact keyword matching**.
+
+Traditional keyword search can fail when users use different words to describe the same concept. For example, a user searching for:
+
+> "How do I reset my password?"
+
+may not find a document containing:
+
+> "Account credential recovery steps"
+
+even though the document is highly relevant.
+
+This project solves this problem using **semantic embeddings** and **vector similarity search**. Documents are loaded, split into meaningful chunks, converted into vector embeddings, stored in a Qdrant vector database, and retrieved using natural-language queries.
+
+An optional Gemini-powered RAG component generates a concise answer based only on the retrieved document context.
+
+---
+
 ## Features
 
 * Upload documents through a Flask web interface.
@@ -1430,56 +1731,10 @@ This architecture follows the basic principles of a **Retrieval-Augmented Genera
 * HTML
 * CSS
 * JavaScript
->>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 ---
 
-## Project Structure
 
-```
-VideoMind-AI/
-├── app.py                          # Flask application (routes, API)
-├── .env                            # Environment variables (GROQ_API_KEY)
-│
-├── src/                            # Core ML pipeline modules
-│   ├── __init__.py
-│   ├── pipeline.py                 # Main processing orchestrator
-│   ├── scenes_detector.py          # Scene boundary detection
-│   ├── frames_extractor.py         # Keyframe extraction (OpenCV)
-│   ├── audio_extractor.py          # Audio extraction (FFmpeg)
-│   ├── transcription_audio.py      # Whisper transcription
-│   ├── scene_description.py        # VLM scene descriptions
-│   ├── summary_generator.py        # Summary & chapter generation
-│   ├── text_chunker.py             # Transcript chunking
-│   ├── embedding_generator.py      # Sentence transformer embeddings
-│   ├── vector_store.py             # Qdrant vector database
-│   ├── video_store.py              # JSON result persistence
-│   ├── question_answering.py       # LLM-based QA
-│   └── llm_generator.py            # Groq API client
-│
-├── templates/                      # Flask HTML templates
-│   ├── index.html                  # Dashboard (upload + video list)
-│   ├── processing.html             # Real-time processing status
-│   ├── results.html                # Video analysis results
-│   └── search.html                 # Semantic search interface
-│
-├── static/
-│   ├── css/                        # Page stylesheets
-│   │   ├── dashboard.css
-│   │   ├── processing.css
-│   │   ├── results.css
-│   │   └── search.css
-│   └── js/                         # Frontend logic
-│       ├── dashboard.js            # Upload + video listing
-│       ├── processing.js           # Progress polling
-│       ├── results.js              # Results display
-│       └── search.js               # Semantic search
-│
-└── data/                           # Generated data (auto-created)
-    ├── uploads/                    # Uploaded videos
-    ├── audio/                      # Extracted audio files
-    ├── keyframes/                  # Scene keyframes
-    └── videos/                     # JSON analysis results
 =======
 ```text
 semantic_doc_search/
@@ -1514,70 +1769,11 @@ semantic_doc_search/
 │
 └── data/
     └── documents/
->>>>>>> 847bdee (Added Task 9 Sementic Document Search)
-```
 
 ---
 
 
-## Prerequisites
 
-- **Python 3.10+**
-- **CUDA-capable GPU** (recommended) or CPU fallback
-- **Qdrant** running locally (or use in-memory fallback)
-- **FFmpeg** installed and in PATH
-- **Groq API Key** (free tier available)
-
----
-
-## Installation
-
-### 1. Clone & Setup Environment
-
-```bash
-git clone <your-repo-url>
-cd VideoMind-AI
-
-# Create virtual environment
-python -m venv venv
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Activate (Linux/Mac)
-source venv/bin/activate
-```
-
-### 2. Install Dependencies
-
-```bash
-pip install flask flask-cors
-pip install faster-whisper transformers torch accelerate
-pip install sentence-transformers qdrant-client
-pip install scenedetect opencv-python-headless
-pip install audio-extract python-dotenv
-pip install groq
-```
-
-### 3. Configure Environment
-
-Create a `.env` file in the project root:
-
-```env
-GROQ_API_KEY=your_groq_api_key_here
-```
-
-Get your free API key at: [https://console.groq.com](https://console.groq.com)
-
-### 4. Start Qdrant (Optional)
-
-```bash
-# Using Docker
-docker run -p 6333:6333 qdrant/qdrant
-
-# Or use in-memory fallback (data lost on restart)
-# No action needed — the app falls back automatically
-```
 
 ### 5. Run the Application
 =======
@@ -1692,7 +1888,6 @@ Add the following to `.gitignore`:
 ## Running the Application
 
 Start the Flask application:
->>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 ```bash
 python app.py
@@ -1703,109 +1898,7 @@ Open your browser: **http://localhost:5000**
 
 ---
 
-## Usage Guide
 
-### Upload a Video
-
-1. Go to the **Dashboard** (`/`)
-2. Drag & drop or click **Browse Files** to select a video
-3. Click **Process Video**
-4. You will be redirected to the **Processing** page with live progress
-
-### Monitor Processing
-
-- Watch real-time pipeline progress (12 steps)
-- See live logs, elapsed time, and metadata updates
-- Processing typically takes 2-5 minutes for a 5-minute video
-
-### View Results
-
-- **Video Player** — Play your uploaded video
-- **Summary** — AI-generated video summary
-- **Chapters** — Clickable timestamped chapter markers
-- **Transcript** — Full timestamped transcript with search
-- **Detected Scenes** — Visual scene descriptions with timestamps
-- **Metadata** — Technical details (resolution, codec, models used)
-
-### Semantic Search
-
-1. Go to **Semantic Search** (`/search`)
-2. Select a processed video from the dropdown
-3. Type a natural language query, e.g.:
-   - *"What is this video about?"*
-   - *"When does the speaker mention AI?"*
-   - *"Explain the part about transformers"*
-4. Results show ranked matches with timestamps and confidence scores
-
----
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Dashboard page |
-| `/processing` | GET | Processing status page |
-| `/results` | GET | Results display page |
-| `/search` | GET | Semantic search page |
-| `/upload` | POST | Upload video, start async processing |
-| `/status/<video_id>` | GET | Poll processing progress |
-| `/video/<video_id>` | GET | Get full analysis results (JSON) |
-| `/video_file/<video_id>` | GET | Stream original video file |
-| `/ask` | POST | Semantic search / question answering |
-| `/videos` | GET | List all processed videos |
-
-### Example: Upload Video
-
-```bash
-curl -X POST -F "video=@myvideo.mp4" http://localhost:5000/upload
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "message": "Video uploaded. Processing started in background.",
-  "status": "processing"
-}
-```
-
-### Example: Ask a Question
-
-```bash
-curl -X POST http://localhost:5000/ask \
-  -H "Content-Type: application/json" \
-  -d '{
-    "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "question": "What is this video about?",
-    "top_k": 5
-  }'
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "video_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "question": "What is this video about?",
-  "answer": "The video discusses the importance of business model feasibility analysis...",
-  "sources": [
-    {
-      "start_time": 0.0,
-      "end_time": 26.86,
-      "text": "The speaker stresses the need for thorough business model feasibility analysis...",
-      "score": 0.85
-    }
-  ]
-}
-=======
-The application will run at:
-
-```text
-http://127.0.0.1:5000
-```
-
-Open the address in your browser.
 
 ---
 
@@ -1962,76 +2055,11 @@ The complete Retrieval-Augmented Generation pipeline is:
                      │
                      ▼
              Generated Answer
->>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 ```
 
 ---
 
-## Architecture
 
-```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│   User Upload   │────▶│  Flask Backend   │────▶│  Async Pipeline │
-│   (Dashboard)   │     │  (app.py)        │     │  (Threading)    │
-└─────────────────┘     └──────────────────┘     └─────────────────┘
-                              │                            │
-                              ▼                            ▼
-                        ┌──────────┐              ┌─────────────────┐
-                        │  Qdrant  │◀─────────────│  ML Pipeline    │
-                        │  Vector  │   Embeddings │  (12 Steps)     │
-                        │  Store   │              │                 │
-                        └──────────┘              │ 1. Scene Detect │
-                              │                   │ 2. Keyframes    │
-                              ▼                   │ 3. Audio Extract│
-                        ┌──────────┐              │ 4. Whisper      │
-                        │  Groq    │◀─────────────│ 5. VLM Scenes   │
-                        │  LLM     │   Context    │ 6. Summary      │
-                        │  (QA)    │              │ 7. Chapters     │
-                        └──────────┘              │ 8. Chunking     │
-                                                  │ 9. Embeddings   │
-                                                  │ 10. Qdrant Store│
-                                                  └─────────────────┘
-```
-
----
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| `ModuleNotFoundError: No module named 'src'` | Create `src/__init__.py` (empty file) |
-| `File already exists in output path` | Delete `data/audio.wav` and restart |
-| `CUDA out of memory` | Reduce batch size or use CPU: edit `transcription_audio.py` device to `"cpu"` |
-| `Qdrant connection refused` | Start Qdrant with Docker, or app auto-falls back to in-memory |
-| `GROQ_API_KEY not found` | Add key to `.env` file |
-| Processing stuck at 5% | Check terminal logs for ML model errors |
-| "Sorry I cannot find this information" | Lower similarity threshold in `app.py` or rephrase query |
-
----
-
-## Performance Notes
-
-| Component | GPU Time | CPU Time | VRAM |
-|-----------|----------|----------|------|
-| Whisper Small | ~30s | ~2min | ~2GB |
-| SmolVLM2-2.2B | ~1-2min | ~5min | ~5GB |
-| Scene Detection | ~10s | ~10s | Minimal |
-| Embeddings | ~5s | ~5s | Minimal |
-| **Total (5min video)** | **~3-5min** | **~10-15min** | **~7GB** |
-
----
-
-## Future Enhancements
-
-- [ ] Multi-video batch processing
-- [ ] Real-time video streaming analysis
-- [ ] Export results as PDF/Word reports
-- [ ] User authentication & video history
-- [ ] Support for more languages (multilingual Whisper)
-- [ ] Fine-tuned VLM for specific domains
-- [ ] WebSocket-based live progress instead of polling
-
----
 
 ## License
 
@@ -2104,7 +2132,6 @@ This project demonstrates practical implementation of:
 
 ---
 
->>>>>>> 847bdee (Added Task 9 Sementic Document Search)
 
 # Code Quality
 
