@@ -1,5 +1,6 @@
 from vector_store import search
 
+
 def search_video(query, top_k=3):
 
     results = search(query, top_k)
